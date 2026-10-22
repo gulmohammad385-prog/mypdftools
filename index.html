@@ -30,7 +30,6 @@
         .tool-card p { font-size: 14px; color: #666; line-height: 1.5; }
 
         .working-badge { display:block; margin-top:10px; font-size:12px; font-weight:bold; color:#28a745; }
-        .demo-badge { display:block; margin-top:10px; font-size:12px; font-weight:bold; color:#e5322d; }
 
         /* Loader Overlay */
         #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 2000; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
@@ -44,85 +43,88 @@
     <div id="loader">
         <div class="spinner"></div>
         <h2 id="loader-text" style="color: #333;">Processing...</h2>
-        <p style="color: #666;">Please wait while we connect to the server.</p>
+        <p style="color: #666;">Please wait while we prepare your document.</p>
     </div>
 
     <!-- Hidden Inputs For All Tools -->
     <input type="file" id="mergeInput" multiple accept="application/pdf" style="display: none;" onchange="handleMerge(event)">
-    <input type="file" id="splitInput" accept="application/pdf" style="display: none;" onchange="handleSplit(event)">
-    <input type="file" id="demoInput" accept=".pdf,.doc,.docx" style="display: none;" onchange="handleDemoTool(event)">
+    <input type="file" id="splitInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'split')">
+    <input type="file" id="rotateInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'rotate')">
+    <input type="file" id="removeInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'remove')">
+    <input type="file" id="blankInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'blank')">
+    <input type="file" id="watermarkInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'watermark')">
 
     <!-- Header -->
     <header>
         <div class="logo">📄 MyPDFTools</div>
         <div class="nav-links">
             <a href="#">Tools</a>
-            <a onclick="alert('Pricing API disconnected in Demo Mode.')">Pricing</a>
+            <a onclick="alert('Pricing page requires backend integration.')">Pricing</a>
             <a class="login-btn" onclick="alert('Database connection required for Login.')">Log in</a>
         </div>
     </header>
 
     <div class="hero">
         <h1>Every tool you need to work with PDFs</h1>
-        <p>Merge, Split, Convert, and Compress your documents securely.</p>
+        <p>100% Working Tools. Process your documents securely right in your browser.</p>
     </div>
 
     <div class="tools-container">
         
-        <!-- 1. MERGE PDF (100% Real) -->
+        <!-- 1. MERGE PDF -->
         <div class="tool-card" onclick="document.getElementById('mergeInput').click()">
             <div class="tool-icon">🔗</div>
             <h3>Merge PDF</h3>
             <p>Combine multiple PDFs into a single document instantly.</p>
-            <span class="working-badge">Active (Client-side)</span>
+            <span class="working-badge">100% Working</span>
         </div>
 
-        <!-- 2. SPLIT PDF (100% Real) -->
+        <!-- 2. SPLIT PDF -->
         <div class="tool-card" onclick="document.getElementById('splitInput').click()">
             <div class="tool-icon">✂️</div>
-            <h3>Split PDF (1st Page)</h3>
+            <h3>Extract 1st Page</h3>
             <p>Extract the first page of any PDF and save it as a new file.</p>
-            <span class="working-badge">Active (Client-side)</span>
+            <span class="working-badge">100% Working</span>
         </div>
 
-        <!-- 3. COMPRESS PDF (Demo) -->
-        <div class="tool-card" onclick="startDemoTool('Compressing PDF...')">
-            <div class="tool-icon">🗜️</div>
-            <h3>Compress PDF</h3>
-            <p>Reduce file size while optimizing for maximal PDF quality.</p>
-            <span class="demo-badge">Requires Backend</span>
-        </div>
-
-        <!-- 4. PDF TO WORD (Demo) -->
-        <div class="tool-card" onclick="startDemoTool('Converting PDF to Word...')">
-            <div class="tool-icon">📝</div>
-            <h3>PDF to Word</h3>
-            <p>Easily convert your PDF files into DOC and DOCX documents.</p>
-            <span class="demo-badge">Requires Backend</span>
-        </div>
-
-        <!-- 5. WORD TO PDF (Demo) -->
-        <div class="tool-card" onclick="startDemoTool('Converting Word to PDF...')">
+        <!-- 3. ROTATE PDF -->
+        <div class="tool-card" onclick="document.getElementById('rotateInput').click()">
             <div class="tool-icon">🔄</div>
-            <h3>Word to PDF</h3>
-            <p>Make DOC and DOCX files easy to read by converting them to PDF.</p>
-            <span class="demo-badge">Requires Backend</span>
+            <h3>Rotate PDF</h3>
+            <p>Rotate all pages of your PDF document by 90 degrees.</p>
+            <span class="working-badge">100% Working</span>
         </div>
 
-        <!-- 6. PROTECT PDF (Demo) -->
-        <div class="tool-card" onclick="startDemoTool('Encrypting Document...')">
-            <div class="tool-icon">🔒</div>
-            <h3>Protect PDF</h3>
-            <p>Encrypt your PDF with a password to keep data confidential.</p>
-            <span class="demo-badge">Requires Backend</span>
+        <!-- 4. REMOVE LAST PAGE -->
+        <div class="tool-card" onclick="document.getElementById('removeInput').click()">
+            <div class="tool-icon">🗑️</div>
+            <h3>Remove Last Page</h3>
+            <p>Instantly delete the last page of your PDF document.</p>
+            <span class="working-badge">100% Working</span>
+        </div>
+
+        <!-- 5. ADD BLANK PAGE -->
+        <div class="tool-card" onclick="document.getElementById('blankInput').click()">
+            <div class="tool-icon">📄</div>
+            <h3>Add Blank Page</h3>
+            <p>Add a brand new empty page at the end of your PDF.</p>
+            <span class="working-badge">100% Working</span>
+        </div>
+
+        <!-- 6. ADD WATERMARK -->
+        <div class="tool-card" onclick="document.getElementById('watermarkInput').click()">
+            <div class="tool-icon">©️</div>
+            <h3>Add Watermark</h3>
+            <p>Stamp a 'MyPDFTools' watermark on the first page of your PDF.</p>
+            <span class="working-badge">100% Working</span>
         </div>
     </div>
 
     <!-- JavaScript -->
     <script>
-        const { PDFDocument } = PDFLib;
+        const { PDFDocument, rgb, degrees } = PDFLib;
 
-        // --- 1. REAL: MERGE PDF ---
+        // --- 1. MERGE PDF ---
         async function handleMerge(event) {
             const files = event.target.files;
             if (files.length < 2) {
@@ -139,7 +141,6 @@
                     copiedPages.forEach((page) => mergedPdf.addPage(page));
                 }
                 downloadPDF(await mergedPdf.save(), "Merged_Document.pdf");
-                alert("✅ PDFs merged successfully!");
             } catch (error) {
                 alert("❌ Error: Could not merge PDFs.");
             } finally {
@@ -147,46 +148,73 @@
             }
         }
 
-        // --- 2. REAL: SPLIT PDF ---
-        async function handleSplit(event) {
+        // --- SINGLE FILE PROCESSOR (For the other 5 tools) ---
+        async function handleProcess(event, action) {
             const file = event.target.files[0];
             if (!file) return;
-            showLoader("Extracting Page...");
+            
+            let loadingText = "Processing...";
+            if(action === 'split') loadingText = "Extracting Page...";
+            if(action === 'rotate') loadingText = "Rotating Pages...";
+            if(action === 'remove') loadingText = "Removing Page...";
+            if(action === 'blank') loadingText = "Adding Blank Page...";
+            if(action === 'watermark') loadingText = "Adding Watermark...";
+            
+            showLoader(loadingText);
+            
             try {
                 const arrayBuffer = await file.arrayBuffer();
-                const originalPdf = await PDFDocument.load(arrayBuffer);
-                const newPdf = await PDFDocument.create();
-                const [firstPage] = await newPdf.copyPages(originalPdf, [0]);
-                newPdf.addPage(firstPage);
-                downloadPDF(await newPdf.save(), "Split_Page.pdf");
-                alert("✅ First page extracted successfully!");
+                const pdfDoc = await PDFDocument.load(arrayBuffer);
+                let finalPdf = pdfDoc;
+                let filename = "Processed_Document.pdf";
+
+                if (action === 'split') {
+                    finalPdf = await PDFDocument.create();
+                    const [firstPage] = await finalPdf.copyPages(pdfDoc, [0]);
+                    finalPdf.addPage(firstPage);
+                    filename = "Split_1st_Page.pdf";
+                } 
+                else if (action === 'rotate') {
+                    const pages = pdfDoc.getPages();
+                    pages.forEach(page => page.setRotation(degrees(90)));
+                    filename = "Rotated_Document.pdf";
+                }
+                else if (action === 'remove') {
+                    const pageCount = pdfDoc.getPageCount();
+                    if (pageCount > 1) {
+                        pdfDoc.removePage(pageCount - 1);
+                        filename = "Removed_Last_Page.pdf";
+                    } else {
+                        alert("The PDF only has 1 page. Cannot remove the last page.");
+                        hideLoader(); event.target.value = ""; return;
+                    }
+                }
+                else if (action === 'blank') {
+                    pdfDoc.addPage();
+                    filename = "Added_Blank_Page.pdf";
+                }
+                else if (action === 'watermark') {
+                    const pages = pdfDoc.getPages();
+                    const firstPage = pages[0];
+                    const { width, height } = firstPage.getSize();
+                    firstPage.drawText('MyPDFTools Demo', {
+                        x: 50,
+                        y: height / 2,
+                        size: 50,
+                        color: rgb(0.9, 0.1, 0.1),
+                        opacity: 0.3,
+                        rotate: degrees(-45),
+                    });
+                    filename = "Watermarked_Document.pdf";
+                }
+
+                downloadPDF(await finalPdf.save(), filename);
             } catch (error) {
-                alert("❌ Error: Could not split PDF.");
+                console.error(error);
+                alert("❌ Error: Could not process the PDF. Ensure it is a valid document.");
             } finally {
                 hideLoader(); event.target.value = "";
             }
-        }
-
-        // --- 3. DEMO LOGIC FOR BACKEND TOOLS ---
-        let currentDemoText = "";
-        function startDemoTool(text) {
-            currentDemoText = text;
-            document.getElementById('demoInput').click();
-        }
-
-        function handleDemoTool(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            // Show fake processing screen
-            showLoader(currentDemoText);
-            
-            // Simulate 3 seconds of server processing, then show error
-            setTimeout(() => {
-                hideLoader();
-                alert(`❌ Server Connection Failed!\n\nThis feature ("${currentDemoText}") requires a Python/Node.js backend server to process the file. GitHub Pages only supports frontend hosting.`);
-                event.target.value = "";
-            }, 3000);
         }
 
         // --- UTILITIES ---
@@ -206,6 +234,7 @@
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+            alert("✅ Process completed successfully! File downloaded.");
         }
     </script>
 </body>
