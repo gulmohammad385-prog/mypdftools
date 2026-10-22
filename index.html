@@ -148,7 +148,7 @@
             <div class="tool-card" onclick="document.getElementById('watermarkInput').click()">
                 <div class="tool-icon">©️</div>
                 <h3>Add Text Stamp</h3>
-                <p>Add a 'MyPDFTools' text stamp to your PDF page.</p>
+                <p>Add your own custom text watermark to all pages of a PDF.</p>
                 <span class="working-badge">100% Working</span>
             </div>
         </div>
@@ -279,6 +279,17 @@
         async function handleProcess(event, action) {
             const file = event.target.files[0];
             if (!file) return;
+
+            // NEW: User Custom Watermark Logic
+            let customWatermarkText = "";
+            if (action === 'watermark') {
+                customWatermarkText = prompt("Enter your custom text for the watermark:", "Confidential");
+                if (!customWatermarkText) { 
+                    event.target.value = ""; 
+                    return; // Agar user ne Cancel kar diya toh operation cancel ho jayega
+                }
+            }
+
             showLoader("Processing...");
             try {
                 const arrayBuffer = await file.arrayBuffer();
@@ -299,10 +310,12 @@
                 }
                 else if (action === 'watermark') {
                     const pages = pdfDoc.getPages();
-                    const firstPage = pages[0];
-                    const { width, height } = firstPage.getSize();
-                    firstPage.drawText('MyPDFTools Demo', {
-                        x: 50, y: height / 2, size: 50, color: rgb(0.9, 0.1, 0.1), opacity: 0.3, rotate: degrees(-45),
+                    // Yeh code sabhi pages par watermark lagayega
+                    pages.forEach(page => {
+                        const { width, height } = page.getSize();
+                        page.drawText(customWatermarkText, {
+                            x: 50, y: height / 2, size: 50, color: rgb(0.9, 0.1, 0.1), opacity: 0.3, rotate: degrees(-45),
+                        });
                     });
                     filename = "Stamped_Document.pdf";
                 }
