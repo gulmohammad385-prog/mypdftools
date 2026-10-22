@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My PDF Tools - Every tool you need to work with PDFs</title>
+    <title>My PDF Tools - Advanced Document Editor</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- PDF-Lib JS Library (For Real Tools) -->
+    <!-- PDF-Lib JS Library -->
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
     <style>
@@ -30,8 +30,8 @@
         .tool-card p { font-size: 14px; color: #666; line-height: 1.5; }
 
         .working-badge { display:block; margin-top:10px; font-size:12px; font-weight:bold; color:#28a745; }
+        .demo-badge { display:block; margin-top:10px; font-size:12px; font-weight:bold; color:#e5322d; }
 
-        /* Loader Overlay */
         #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 2000; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
         .spinner { border: 5px solid #f3f3f3; border-top: 5px solid #e5322d; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -39,98 +39,89 @@
 </head>
 <body>
 
-    <!-- Loading Screen -->
     <div id="loader">
         <div class="spinner"></div>
         <h2 id="loader-text" style="color: #333;">Processing...</h2>
-        <p style="color: #666;">Please wait while we prepare your document.</p>
     </div>
 
-    <!-- Hidden Inputs For All Tools -->
+    <!-- Hidden Inputs -->
     <input type="file" id="mergeInput" multiple accept="application/pdf" style="display: none;" onchange="handleMerge(event)">
-    <input type="file" id="splitInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'split')">
-    <input type="file" id="rotateInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'rotate')">
-    <input type="file" id="removeInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'remove')">
-    <input type="file" id="blankInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'blank')">
-    <input type="file" id="watermarkInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'watermark')">
+    <input type="file" id="imgToPdfInput" accept="image/png, image/jpeg" style="display: none;" onchange="handleImageToPdf(event)">
+    <input type="file" id="photoResizeInput" accept="image/*" style="display: none;" onchange="handlePhotoResize(event)">
+    <input type="file" id="demoInput" style="display: none;" onchange="handleDemoTool(event)">
 
-    <!-- Header -->
     <header>
         <div class="logo">📄 MyPDFTools</div>
         <div class="nav-links">
             <a href="#">Tools</a>
-            <a onclick="alert('Pricing page requires backend integration.')">Pricing</a>
-            <a class="login-btn" onclick="alert('Database connection required for Login.')">Log in</a>
+            <a onclick="alert('Pricing API disconnected.')">Pricing</a>
+            <a class="login-btn" onclick="alert('Database connection required.')">Log in</a>
         </div>
     </header>
 
     <div class="hero">
-        <h1>Every tool you need to work with PDFs</h1>
-        <p>100% Working Tools. Process your documents securely right in your browser.</p>
+        <h1>All the PDF & Image Tools You Need</h1>
+        <p>Edit, convert, merge, and resize your files securely right here.</p>
     </div>
 
     <div class="tools-container">
         
-        <!-- 1. MERGE PDF -->
+        <!-- 1. MERGE PDF (100% Real) -->
         <div class="tool-card" onclick="document.getElementById('mergeInput').click()">
             <div class="tool-icon">🔗</div>
             <h3>Merge PDF</h3>
-            <p>Combine multiple PDFs into a single document instantly.</p>
+            <p>Combine multiple PDFs into a single document.</p>
             <span class="working-badge">100% Working</span>
         </div>
 
-        <!-- 2. SPLIT PDF -->
-        <div class="tool-card" onclick="document.getElementById('splitInput').click()">
-            <div class="tool-icon">✂️</div>
-            <h3>Extract 1st Page</h3>
-            <p>Extract the first page of any PDF and save it as a new file.</p>
+        <!-- 2. IMAGE TO PDF (100% Real) -->
+        <div class="tool-card" onclick="document.getElementById('imgToPdfInput').click()">
+            <div class="tool-icon">🖼️</div>
+            <h3>Image to PDF</h3>
+            <p>Convert JPG/PNG images to a PDF file automatically fitting the size.</p>
             <span class="working-badge">100% Working</span>
         </div>
 
-        <!-- 3. ROTATE PDF -->
-        <div class="tool-card" onclick="document.getElementById('rotateInput').click()">
-            <div class="tool-icon">🔄</div>
-            <h3>Rotate PDF</h3>
-            <p>Rotate all pages of your PDF document by 90 degrees.</p>
+        <!-- 3. PHOTO RESIZE (100% Real) -->
+        <div class="tool-card" onclick="document.getElementById('photoResizeInput').click()">
+            <div class="tool-icon">📐</div>
+            <h3>Photo Resizer</h3>
+            <p>Resize your photos to any custom pixel size worldwide.</p>
             <span class="working-badge">100% Working</span>
         </div>
 
-        <!-- 4. REMOVE LAST PAGE -->
-        <div class="tool-card" onclick="document.getElementById('removeInput').click()">
-            <div class="tool-icon">🗑️</div>
-            <h3>Remove Last Page</h3>
-            <p>Instantly delete the last page of your PDF document.</p>
-            <span class="working-badge">100% Working</span>
+        <!-- 4. MS OFFICE TO PDF (Demo) -->
+        <div class="tool-card" onclick="startDemoTool('Converting Office File to PDF...')">
+            <div class="tool-icon">📊</div>
+            <h3>Word / Excel / PPT to PDF</h3>
+            <p>Convert Microsoft Office documents into PDF format.</p>
+            <span class="demo-badge">Requires Cloud Server</span>
         </div>
 
-        <!-- 5. ADD BLANK PAGE -->
-        <div class="tool-card" onclick="document.getElementById('blankInput').click()">
-            <div class="tool-icon">📄</div>
-            <h3>Add Blank Page</h3>
-            <p>Add a brand new empty page at the end of your PDF.</p>
-            <span class="working-badge">100% Working</span>
+        <!-- 5. WATERMARK REMOVER (Demo) -->
+        <div class="tool-card" onclick="startDemoTool('AI Scanning for Watermarks...')">
+            <div class="tool-icon">🧽</div>
+            <h3>Watermark Remover</h3>
+            <p>Auto-detect and remove watermarks from a particular area using AI.</p>
+            <span class="demo-badge">Requires AI Server</span>
         </div>
 
-        <!-- 6. ADD WATERMARK -->
-        <div class="tool-card" onclick="document.getElementById('watermarkInput').click()">
-            <div class="tool-icon">©️</div>
-            <h3>Add Watermark</h3>
-            <p>Stamp a 'MyPDFTools' watermark on the first page of your PDF.</p>
-            <span class="working-badge">100% Working</span>
+        <!-- 6. FULL PDF EDITOR (Demo) -->
+        <div class="tool-card" onclick="startDemoTool('Loading Advanced PDF Editor...')">
+            <div class="tool-icon">✍️</div>
+            <h3>Full PDF Editor</h3>
+            <p>Edit text, images, and layout in any PDF completely.</p>
+            <span class="demo-badge">Requires Paid Engine</span>
         </div>
     </div>
 
-    <!-- JavaScript -->
     <script>
-        const { PDFDocument, rgb, degrees } = PDFLib;
+        const { PDFDocument } = PDFLib;
 
-        // --- 1. MERGE PDF ---
+        // --- 1. REAL: MERGE PDF ---
         async function handleMerge(event) {
             const files = event.target.files;
-            if (files.length < 2) {
-                alert("Please select at least 2 PDF files to merge.");
-                event.target.value = ""; return;
-            }
+            if (files.length < 2) return;
             showLoader("Merging PDFs...");
             try {
                 const mergedPdf = await PDFDocument.create();
@@ -140,81 +131,89 @@
                     const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
                     copiedPages.forEach((page) => mergedPdf.addPage(page));
                 }
-                downloadPDF(await mergedPdf.save(), "Merged_Document.pdf");
-            } catch (error) {
-                alert("❌ Error: Could not merge PDFs.");
-            } finally {
-                hideLoader(); event.target.value = "";
-            }
+                downloadFile(await mergedPdf.save(), "Merged_Document.pdf", "application/pdf");
+            } catch (e) { alert("Error merging PDFs."); }
+            hideLoader(); event.target.value = "";
         }
 
-        // --- SINGLE FILE PROCESSOR (For the other 5 tools) ---
-        async function handleProcess(event, action) {
+        // --- 2. REAL: IMAGE TO PDF ---
+        async function handleImageToPdf(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            showLoader("Converting Image to PDF...");
+            try {
+                const imgBuffer = await file.arrayBuffer();
+                const pdfDoc = await PDFDocument.create();
+                let img;
+                if (file.type === 'image/jpeg' || file.type === 'image/jpg') {
+                    img = await pdfDoc.embedJpg(imgBuffer);
+                } else if (file.type === 'image/png') {
+                    img = await pdfDoc.embedPng(imgBuffer);
+                } else {
+                    throw new Error("Only JPG and PNG supported.");
+                }
+                const page = pdfDoc.addPage([img.width, img.height]);
+                page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
+                downloadFile(await pdfDoc.save(), "Converted_Image.pdf", "application/pdf");
+            } catch (e) { alert(e.message); }
+            hideLoader(); event.target.value = "";
+        }
+
+        // --- 3. REAL: PHOTO RESIZER ---
+        function handlePhotoResize(event) {
             const file = event.target.files[0];
             if (!file) return;
             
-            let loadingText = "Processing...";
-            if(action === 'split') loadingText = "Extracting Page...";
-            if(action === 'rotate') loadingText = "Rotating Pages...";
-            if(action === 'remove') loadingText = "Removing Page...";
-            if(action === 'blank') loadingText = "Adding Blank Page...";
-            if(action === 'watermark') loadingText = "Adding Watermark...";
-            
-            showLoader(loadingText);
-            
-            try {
-                const arrayBuffer = await file.arrayBuffer();
-                const pdfDoc = await PDFDocument.load(arrayBuffer);
-                let finalPdf = pdfDoc;
-                let filename = "Processed_Document.pdf";
+            // Ask user for the new width
+            const targetWidth = prompt("Enter the new width in pixels (e.g., 800, 1024):", "800");
+            if (!targetWidth || isNaN(targetWidth)) { event.target.value = ""; return; }
 
-                if (action === 'split') {
-                    finalPdf = await PDFDocument.create();
-                    const [firstPage] = await finalPdf.copyPages(pdfDoc, [0]);
-                    finalPdf.addPage(firstPage);
-                    filename = "Split_1st_Page.pdf";
-                } 
-                else if (action === 'rotate') {
-                    const pages = pdfDoc.getPages();
-                    pages.forEach(page => page.setRotation(degrees(90)));
-                    filename = "Rotated_Document.pdf";
+            showLoader("Resizing Photo...");
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const scale = targetWidth / img.width;
+                    canvas.width = targetWidth;
+                    canvas.height = img.height * scale; // Keep ratio
+                    
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    canvas.toBlob(function(blob) {
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = "Resized_Photo.jpg";
+                        a.click();
+                        hideLoader();
+                    }, 'image/jpeg', 0.9);
                 }
-                else if (action === 'remove') {
-                    const pageCount = pdfDoc.getPageCount();
-                    if (pageCount > 1) {
-                        pdfDoc.removePage(pageCount - 1);
-                        filename = "Removed_Last_Page.pdf";
-                    } else {
-                        alert("The PDF only has 1 page. Cannot remove the last page.");
-                        hideLoader(); event.target.value = ""; return;
-                    }
-                }
-                else if (action === 'blank') {
-                    pdfDoc.addPage();
-                    filename = "Added_Blank_Page.pdf";
-                }
-                else if (action === 'watermark') {
-                    const pages = pdfDoc.getPages();
-                    const firstPage = pages[0];
-                    const { width, height } = firstPage.getSize();
-                    firstPage.drawText('MyPDFTools Demo', {
-                        x: 50,
-                        y: height / 2,
-                        size: 50,
-                        color: rgb(0.9, 0.1, 0.1),
-                        opacity: 0.3,
-                        rotate: degrees(-45),
-                    });
-                    filename = "Watermarked_Document.pdf";
-                }
-
-                downloadPDF(await finalPdf.save(), filename);
-            } catch (error) {
-                console.error(error);
-                alert("❌ Error: Could not process the PDF. Ensure it is a valid document.");
-            } finally {
-                hideLoader(); event.target.value = "";
+                img.src = e.target.result;
             }
+            reader.readAsDataURL(file);
+            event.target.value = "";
+        }
+
+        // --- 4. DEMO LOGIC FOR ADVANCED TOOLS ---
+        let currentDemoText = "";
+        function startDemoTool(text) {
+            currentDemoText = text;
+            document.getElementById('demoInput').click();
+        }
+
+        function handleDemoTool(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            showLoader(currentDemoText);
+            
+            // Simulate 3 seconds of server processing
+            setTimeout(() => {
+                hideLoader();
+                alert(`❌ Server Required!\n\nThis premium feature requires a backend server (Python/Node.js or AI Engine) to process the file. GitHub Pages only supports HTML/JS.`);
+                event.target.value = "";
+            }, 3000);
         }
 
         // --- UTILITIES ---
@@ -222,19 +221,15 @@
             document.getElementById('loader-text').innerText = text;
             document.getElementById('loader').style.display = 'flex';
         }
-        function hideLoader() {
-            document.getElementById('loader').style.display = 'none';
-        }
-        function downloadPDF(pdfBytes, filename) {
-            const blob = new Blob([pdfBytes], { type: "application/pdf" });
+        function hideLoader() { document.getElementById('loader').style.display = 'none'; }
+        
+        function downloadFile(bytes, filename, type) {
+            const blob = new Blob([bytes], { type: type });
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
             a.download = filename;
-            document.body.appendChild(a);
             a.click();
-            document.body.removeChild(a);
-            alert("✅ Process completed successfully! File downloaded.");
         }
     </script>
 </body>
