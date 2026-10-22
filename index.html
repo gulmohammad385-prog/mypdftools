@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My PDF Tools - Advanced Document Editor</title>
+    <title>My PDF Tools - 100% Working</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- PDF-Lib JS Library -->
@@ -35,7 +35,6 @@
         .tool-card h3 { font-size: 18px; color: #111; margin-bottom: 10px; }
         .tool-card p { font-size: 14px; color: #666; line-height: 1.5; }
         .working-badge { display:block; margin-top:10px; font-size:12px; font-weight:bold; color:#28a745; }
-        .demo-badge { display:block; margin-top:10px; font-size:12px; font-weight:bold; color:#e5322d; }
 
         /* Pricing Page */
         .pricing-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
@@ -54,7 +53,6 @@
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 40px; border-radius: 12px; width: 320px; text-align: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         .close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #888; }
-        .modal-content h2 { margin-top: 0; margin-bottom: 20px; }
         .form-group { text-align: left; margin-bottom: 15px; }
         .form-group label { font-size: 14px; font-weight: 600; color: #333; }
         .form-group input { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
@@ -88,7 +86,6 @@
                 <input type="password" id="loginPass" placeholder="Enter your password">
             </div>
             <button class="submit-login-btn" onclick="simulateLogin()">Log in</button>
-            <p style="font-size: 12px; color: #888; margin-top: 15px;">This is a secure demo login system.</p>
         </div>
     </div>
 
@@ -96,7 +93,9 @@
     <input type="file" id="mergeInput" multiple accept="application/pdf" style="display: none;" onchange="handleMerge(event)">
     <input type="file" id="imgToPdfInput" accept="image/png, image/jpeg" style="display: none;" onchange="handleImageToPdf(event)">
     <input type="file" id="photoResizeInput" accept="image/*" style="display: none;" onchange="handlePhotoResize(event)">
-    <input type="file" id="demoInput" style="display: none;" onchange="handleDemoTool(event)">
+    <input type="file" id="splitInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'split')">
+    <input type="file" id="rotateInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'rotate')">
+    <input type="file" id="watermarkInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'watermark')">
 
     <!-- Header -->
     <header>
@@ -112,7 +111,7 @@
     <div id="homeSection" class="page-section active">
         <div class="hero">
             <h1>All the PDF & Image Tools You Need</h1>
-            <p>Edit, convert, merge, and resize your files securely right here.</p>
+            <p>100% Free and Working Tools right in your browser.</p>
         </div>
 
         <div class="tools-container">
@@ -125,7 +124,7 @@
             <div class="tool-card" onclick="document.getElementById('imgToPdfInput').click()">
                 <div class="tool-icon">🖼️</div>
                 <h3>Image to PDF</h3>
-                <p>Convert JPG/PNG images to a PDF file automatically fitting the size.</p>
+                <p>Convert JPG/PNG images to a PDF file perfectly.</p>
                 <span class="working-badge">100% Working</span>
             </div>
             <div class="tool-card" onclick="document.getElementById('photoResizeInput').click()">
@@ -134,23 +133,23 @@
                 <p>Resize your photos to any custom pixel size worldwide.</p>
                 <span class="working-badge">100% Working</span>
             </div>
-            <div class="tool-card" onclick="startDemoTool('Converting Office File to PDF...')">
-                <div class="tool-icon">📊</div>
-                <h3>Word / Excel / PPT to PDF</h3>
-                <p>Convert Microsoft Office documents into PDF format.</p>
-                <span class="demo-badge">Requires Cloud Server</span>
+            <div class="tool-card" onclick="document.getElementById('splitInput').click()">
+                <div class="tool-icon">✂️</div>
+                <h3>Extract 1st Page</h3>
+                <p>Extract the first page of any PDF and save it as a new file.</p>
+                <span class="working-badge">100% Working</span>
             </div>
-            <div class="tool-card" onclick="startDemoTool('AI Scanning for Watermarks...')">
-                <div class="tool-icon">🧽</div>
-                <h3>Watermark Remover</h3>
-                <p>Auto-detect and remove watermarks from a particular area using AI.</p>
-                <span class="demo-badge">Requires AI Server</span>
+            <div class="tool-card" onclick="document.getElementById('rotateInput').click()">
+                <div class="tool-icon">🔄</div>
+                <h3>Rotate PDF</h3>
+                <p>Rotate all pages of your PDF document by 90 degrees.</p>
+                <span class="working-badge">100% Working</span>
             </div>
-            <div class="tool-card" onclick="startDemoTool('Loading Advanced PDF Editor...')">
-                <div class="tool-icon">✍️</div>
-                <h3>Full PDF Editor</h3>
-                <p>Edit text, images, and layout in any PDF completely.</p>
-                <span class="demo-badge">Requires Paid Engine</span>
+            <div class="tool-card" onclick="document.getElementById('watermarkInput').click()">
+                <div class="tool-icon">©️</div>
+                <h3>Add Text Stamp</h3>
+                <p>Add a 'MyPDFTools' text stamp to your PDF page.</p>
+                <span class="working-badge">100% Working</span>
             </div>
         </div>
     </div>
@@ -159,72 +158,54 @@
     <div id="pricingSection" class="page-section">
         <div class="hero">
             <h1>Simple, Transparent Pricing</h1>
-            <p>Choose the plan that best fits your document processing needs.</p>
+            <p>Choose the plan that best fits your needs.</p>
         </div>
         <div class="pricing-container">
-            <!-- Free Plan -->
             <div class="price-card">
                 <h3>Basic</h3>
                 <h2>$0 <span>/month</span></h2>
                 <ul>
                     <li>Merge & Split PDFs</li>
                     <li>Image to PDF</li>
-                    <li>Limited Photo Resizing</li>
-                    <li>Standard Support</li>
+                    <li>Photo Resizing</li>
                 </ul>
                 <button class="buy-btn" onclick="openLogin()">Get Started</button>
             </div>
-            <!-- Pro Plan -->
             <div class="price-card pro">
                 <h3>Premium</h3>
                 <h2>$9 <span>/month</span></h2>
                 <ul>
                     <li><strong>All Basic Features</strong></li>
-                    <li>Word/Excel to PDF Converter</li>
                     <li>Unlimited Processing</li>
                     <li>No Ads</li>
                 </ul>
                 <button class="buy-btn" onclick="openLogin()">Go Premium</button>
-            </div>
-            <!-- Business Plan -->
-            <div class="price-card">
-                <h3>Business</h3>
-                <h2>$29 <span>/month</span></h2>
-                <ul>
-                    <li><strong>All Premium Features</strong></li>
-                    <li>AI Watermark Remover</li>
-                    <li>Full PDF Text Editor</li>
-                    <li>API Access for Developers</li>
-                </ul>
-                <button class="buy-btn" onclick="openLogin()">Contact Sales</button>
             </div>
         </div>
     </div>
 
     <!-- JavaScript for Tools and UI -->
     <script>
-        const { PDFDocument } = PDFLib;
+        const { PDFDocument, rgb, degrees } = PDFLib;
 
-        // UI Logic: Switch Pages
+        // UI Logic
         function switchPage(page) {
             document.getElementById('homeSection').classList.remove('active');
             document.getElementById('pricingSection').classList.remove('active');
             if(page === 'home') document.getElementById('homeSection').classList.add('active');
             if(page === 'pricing') document.getElementById('pricingSection').classList.add('active');
         }
-
-        // UI Logic: Login Modal
         function openLogin() { document.getElementById('loginModal').style.display = 'flex'; }
         function closeLogin() { document.getElementById('loginModal').style.display = 'none'; }
         function simulateLogin() {
             let email = document.getElementById('loginEmail').value;
             let pass = document.getElementById('loginPass').value;
             if(!email || !pass) { alert("Please enter email and password."); return; }
-            alert("Security Alert: User Database disconnected in Demo Mode. \n\nPlease connect a Backend Server (Firebase/MySQL) to authenticate users.");
+            alert("Security Alert: User Database disconnected in Demo Mode.");
             closeLogin();
         }
 
-        // Tool: Merge PDF
+        // Tools Logic
         async function handleMerge(event) {
             const files = event.target.files;
             if (files.length < 2) return;
@@ -242,7 +223,6 @@
             hideLoader(); event.target.value = "";
         }
 
-        // Tool: Image to PDF
         async function handleImageToPdf(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -265,7 +245,6 @@
             hideLoader(); event.target.value = "";
         }
 
-        // Tool: Photo Resizer
         function handlePhotoResize(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -297,21 +276,42 @@
             event.target.value = "";
         }
 
-        // Tool: Backend Demo
-        let currentDemoText = "";
-        function startDemoTool(text) {
-            currentDemoText = text;
-            document.getElementById('demoInput').click();
-        }
-        function handleDemoTool(event) {
+        async function handleProcess(event, action) {
             const file = event.target.files[0];
             if (!file) return;
-            showLoader(currentDemoText);
-            setTimeout(() => {
-                hideLoader();
-                alert(`❌ Server Required!\n\nThis premium feature requires a backend server (Python/Node.js or AI Engine) to process the file. GitHub Pages only supports HTML/JS.`);
-                event.target.value = "";
-            }, 3000);
+            showLoader("Processing...");
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdfDoc = await PDFDocument.load(arrayBuffer);
+                let finalPdf = pdfDoc;
+                let filename = "Processed_Document.pdf";
+
+                if (action === 'split') {
+                    finalPdf = await PDFDocument.create();
+                    const [firstPage] = await finalPdf.copyPages(pdfDoc, [0]);
+                    finalPdf.addPage(firstPage);
+                    filename = "Split_1st_Page.pdf";
+                } 
+                else if (action === 'rotate') {
+                    const pages = pdfDoc.getPages();
+                    pages.forEach(page => page.setRotation(degrees(90)));
+                    filename = "Rotated_Document.pdf";
+                }
+                else if (action === 'watermark') {
+                    const pages = pdfDoc.getPages();
+                    const firstPage = pages[0];
+                    const { width, height } = firstPage.getSize();
+                    firstPage.drawText('MyPDFTools Demo', {
+                        x: 50, y: height / 2, size: 50, color: rgb(0.9, 0.1, 0.1), opacity: 0.3, rotate: degrees(-45),
+                    });
+                    filename = "Stamped_Document.pdf";
+                }
+                downloadFile(await finalPdf.save(), filename, "application/pdf");
+            } catch (error) {
+                alert("❌ Error processing PDF.");
+            } finally {
+                hideLoader(); event.target.value = "";
+            }
         }
 
         // Utilities
