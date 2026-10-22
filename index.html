@@ -6,57 +6,22 @@
     <title>My PDF Tools - Every tool you need to work with PDFs</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- PDF-Lib JS Library (असली में PDF प्रोसेस करने के लिए) -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
     <style>
         /* ======= ग्लोबल सेटिंग्स ======= */
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f6f5f2;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
+        body { font-family: 'Montserrat', sans-serif; background-color: #f6f5f2; margin: 0; padding: 0; color: #333; }
 
         /* ======= हेडर / नेविगेशन बार ======= */
-        header {
-            background-color: #ffffff;
-            padding: 15px 40px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: #e5322d; /* iLovePDF Red */
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .nav-links {
-            display: flex;
-            gap: 25px;
-            align-items: center;
-        }
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 600;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
+        header { background-color: #ffffff; padding: 15px 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 24px; font-weight: 700; color: #e5322d; text-decoration: none; cursor: pointer; }
+        .nav-links { display: flex; gap: 25px; align-items: center; }
+        .nav-links a { text-decoration: none; color: #333; font-weight: 600; cursor: pointer; transition: color 0.3s; }
         .nav-links a:hover { color: #e5322d; }
-        .login-btn {
-            background-color: #e5322d;
-            color: white !important;
-            padding: 10px 20px;
-            border-radius: 6px;
-        }
+        .login-btn { background-color: #e5322d; color: white !important; padding: 10px 20px; border-radius: 6px; }
         .login-btn:hover { background-color: #c82320; }
 
-        /* पेज हाइड/शो करने की क्लास */
         .page-section { display: none; }
         .page-section.active { display: block; animation: fadeIn 0.5s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -66,117 +31,79 @@
         .hero h1 { font-size: 36px; color: #1f2937; margin-bottom: 10px; }
         .hero p { font-size: 18px; color: #4b5563; max-width: 600px; margin: 0 auto; }
 
-        .tools-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px 60px 20px;
-        }
-        .tool-card {
-            background: #ffffff;
-            padding: 30px 20px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            border: 1px solid #eaeaea;
-            cursor: pointer;
-        }
-        .tool-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(229, 50, 45, 0.15);
-            border-color: #e5322d;
-        }
+        .tools-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; padding: 0 20px 60px 20px; }
+        .tool-card { background: #ffffff; padding: 30px 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: all 0.3s ease; border: 1px solid #eaeaea; cursor: pointer; position: relative; }
+        .tool-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(229, 50, 45, 0.15); border-color: #e5322d; }
         .tool-icon { font-size: 45px; margin-bottom: 15px; }
         .tool-card h3 { font-size: 18px; color: #111; margin-bottom: 10px; }
         .tool-card p { font-size: 14px; color: #666; line-height: 1.5; }
 
-        /* ======= सब्सक्रिप्शन (Pricing) पेज ======= */
-        .pricing-container {
-            max-width: 1000px; margin: 50px auto; padding: 0 20px;
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;
-        }
-        .price-card {
-            background: #fff; padding: 40px; border-radius: 12px;
-            text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            border: 1px solid #ddd;
-        }
-        .price-card.premium { border: 2px solid #e5322d; position: relative; transform: scale(1.05); }
-        .badge { position: absolute; top: -12px; right: 35%; background: #e5322d; color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; }
-        .price-card h3 { font-size: 24px; color: #333; }
-        .price-card .price { font-size: 40px; font-weight: bold; color: #111; margin: 20px 0; }
-        .price-card ul { list-style: none; padding: 0; text-align: left; margin-bottom: 30px; color: #555; }
-        .price-card ul li { margin-bottom: 15px; padding-left: 25px; position: relative; }
-        .price-card ul li::before { content: '✔️'; position: absolute; left: 0; color: green; }
-        .btn-buy { background: #e5322d; color: white; width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        .btn-buy:hover { background: #c82320; }
-
-        /* ======= लॉग इन (Login) पेज ======= */
-        .login-container {
-            display: flex; justify-content: center; align-items: center; min-height: 70vh;
-        }
-        .login-box {
-            background: white; padding: 40px; border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px;
-            text-align: center;
-        }
-        .login-box h2 { margin-top: 0; color: #333; }
-        .input-group { margin-bottom: 20px; text-align: left; }
-        .input-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; font-size: 14px; }
-        .input-group input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 15px; }
-        .login-box .btn-submit { background: #e5322d; color: white; width: 100%; padding: 15px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        .login-box .btn-submit:hover { background: #c82320; }
-        .login-footer { margin-top: 20px; font-size: 14px; color: #666; }
-        .login-footer a { color: #e5322d; text-decoration: none; font-weight: bold; }
+        /* Loader Overlay */
+        #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 2000; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
+        .spinner { border: 5px solid #f3f3f3; border-top: 5px solid #e5322d; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <!-- हेडर (नेविगेशन मेनू) -->
+    <!-- Loading Screen -->
+    <div id="loader">
+        <div class="spinner"></div>
+        <h2 style="color: #333;">Processing your PDF...</h2>
+        <p style="color: #666;">Please wait, it might take a few seconds.</p>
+    </div>
+
+    <!-- Hidden Input for Merge PDF -->
+    <input type="file" id="mergeInput" multiple accept="application/pdf" style="display: none;" onchange="handleMerge(event)">
+
+    <!-- हेडर -->
     <header>
         <div class="logo" onclick="switchPage('homePage')">📄 MyPDFTools</div>
         <div class="nav-links">
             <a onclick="switchPage('homePage')">Tools</a>
-            <a onclick="switchPage('pricingPage')">Pricing</a>
-            <a class="login-btn" onclick="switchPage('loginPage')">Log in</a>
+            <a onclick="alert('Pricing page is currently disabled for this demo.')">Pricing</a>
+            <a class="login-btn" onclick="alert('Login functionality requires a backend database.')">Log in</a>
         </div>
     </header>
 
-    <!-- 1. होम पेज (टूल्स वाला हिस्सा) -->
+    <!-- होम पेज (टूल्स वाला हिस्सा) -->
     <div id="homePage" class="page-section active">
         <div class="hero">
             <h1>Every tool you need to work with PDFs</h1>
             <p>100% FREE and easy to use. Merge, split, compress, convert, and secure your PDFs in seconds.</p>
         </div>
         <div class="tools-container">
-            <div class="tool-card" onclick="alert('Opening Merge PDF...')">
+            
+            <!-- WORKING TOOL: MERGE PDF -->
+            <div class="tool-card" onclick="document.getElementById('mergeInput').click()">
                 <div class="tool-icon">🔗</div>
                 <h3>Merge PDF</h3>
                 <p>Combine PDFs in the order you want with the easiest PDF merger available.</p>
+                <span style="display:block; margin-top:10px; font-size:12px; font-weight:bold; color:#e5322d;">(100% Working)</span>
             </div>
-            <div class="tool-card" onclick="alert('Opening Split PDF...')">
+
+            <!-- OTHER TOOLS (Mockups) -->
+            <div class="tool-card" onclick="alert('Split PDF is coming soon! This requires advanced array buffer handling.')">
                 <div class="tool-icon">✂️</div>
                 <h3>Split PDF</h3>
                 <p>Separate one page or a whole set for easy conversion into independent PDF files.</p>
             </div>
-            <div class="tool-card" onclick="alert('Opening Compress PDF...')">
+            <div class="tool-card" onclick="alert('Notice: Compress PDF requires an active Backend Server or Premium API.')">
                 <div class="tool-icon">🗜️</div>
                 <h3>Compress PDF</h3>
                 <p>Reduce file size while optimizing for maximal PDF quality.</p>
             </div>
-            <div class="tool-card" onclick="alert('Opening PDF to Word...')">
+            <div class="tool-card" onclick="alert('Notice: PDF to Word conversion requires Python/Node.js Backend.')">
                 <div class="tool-icon">📝</div>
                 <h3>PDF to Word</h3>
                 <p>Easily convert your PDF files into easy to edit DOC and DOCX documents.</p>
             </div>
-            <div class="tool-card" onclick="alert('Opening Word to PDF...')">
+            <div class="tool-card" onclick="alert('Notice: Word to PDF conversion requires Microsoft Office APIs.')">
                 <div class="tool-icon">🔄</div>
                 <h3>Word to PDF</h3>
                 <p>Make DOC and DOCX files easy to read by converting them to PDF.</p>
             </div>
-            <div class="tool-card" onclick="alert('Opening Protect PDF...')">
+            <div class="tool-card" onclick="alert('Protect PDF is coming soon!')">
                 <div class="tool-icon">🔒</div>
                 <h3>Protect PDF</h3>
                 <p>Encrypt your PDF with a password to keep sensitive data confidential.</p>
@@ -184,80 +111,67 @@
         </div>
     </div>
 
-    <!-- 2. सब्सक्रिप्शन (Pricing) पेज -->
-    <div id="pricingPage" class="page-section">
-        <div class="hero" style="padding-bottom: 0;">
-            <h1>Choose Your Plan</h1>
-            <p>Get full access to all premium tools, unlimited document processing, and no ads.</p>
-        </div>
-        <div class="pricing-container">
-            <!-- Free Plan -->
-            <div class="price-card">
-                <h3>Free</h3>
-                <div class="price">$0<span>/mo</span></div>
-                <ul>
-                    <li>Access to all basic tools</li>
-                    <li>Limited document processing</li>
-                    <li>Files deleted after 2 hours</li>
-                </ul>
-                <button class="btn-buy" style="background:#333;" onclick="alert('Current Plan')">Current Plan</button>
-            </div>
-            <!-- Premium Plan -->
-            <div class="price-card premium">
-                <div class="badge">MOST POPULAR</div>
-                <h3>Premium</h3>
-                <div class="price">$4.99<span>/mo</span></div>
-                <ul>
-                    <li>Unlimited document processing</li>
-                    <li>No file size limits</li>
-                    <li>Zero advertisements</li>
-                    <li>Customer support</li>
-                </ul>
-                <button class="btn-buy" onclick="alert('Proceed to Payment')">Upgrade to Premium</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 3. लॉग इन (Login) पेज -->
-    <div id="loginPage" class="page-section">
-        <div class="login-container">
-            <div class="login-box">
-                <h2>Welcome Back</h2>
-                <p style="color:#666; margin-bottom:20px;">Log in to access your saved files.</p>
-                <form onsubmit="event.preventDefault(); alert('Login Successful!'); switchPage('homePage');">
-                    <div class="input-group">
-                        <label>Email Address</label>
-                        <input type="email" placeholder="Enter your email" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Password</label>
-                        <input type="password" placeholder="Enter your password" required>
-                    </div>
-                    <button type="submit" class="btn-submit">Log in</button>
-                </form>
-                <div class="login-footer">
-                    Don't have an account? <a href="#" onclick="alert('Registration Page coming soon!')">Sign up</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- JavaScript (पेज बदलने के लिए) -->
+    <!-- JavaScript -->
     <script>
+        // Page Switch Logic
         function switchPage(pageId) {
-            // सारे पेजों को छुपाएं (Hide all pages)
             let pages = document.querySelectorAll('.page-section');
-            pages.forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            // जिस पर क्लिक किया है, उसे दिखाएं (Show active page)
+            pages.forEach(page => page.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
-            
-            // स्क्रीन को सबसे ऊपर स्क्रॉल करें (Scroll to top)
             window.scrollTo(0, 0);
         }
-    </script>
 
+        // REAL WORKING LOGIC FOR MERGE PDF
+        async function handleMerge(event) {
+            const files = event.target.files;
+            
+            // अगर यूज़र ने 2 से कम फाइल चुनी हैं
+            if (files.length < 2) {
+                alert("Please select at least 2 PDF files to merge.");
+                event.target.value = ""; // reset input
+                return;
+            }
+
+            // लोडिंग स्क्रीन दिखाएं
+            document.getElementById('loader').style.display = 'flex';
+
+            try {
+                const { PDFDocument } = PDFLib;
+                const mergedPdf = await PDFDocument.create();
+
+                // सभी फाइलों को एक-एक करके पढ़ें और जोड़ें
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await PDFDocument.load(arrayBuffer);
+                    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+                    copiedPages.forEach((page) => mergedPdf.addPage(page));
+                }
+
+                // नई जुड़ी हुई फाइल को सेव करें
+                const mergedPdfBytes = await mergedPdf.save();
+                
+                // ब्राउज़र में ऑटोमैटिक डाउनलोड ट्रिगर करें
+                const blob = new Blob([mergedPdfBytes], { type: "application/pdf" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "Merged_Document_MyPDFTools.pdf";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                alert("✅ Success! Your PDFs have been merged and downloaded.");
+
+            } catch (error) {
+                console.error(error);
+                alert("❌ Error: Could not merge PDFs. Make sure the files are valid PDF documents.");
+            } finally {
+                // काम खत्म होने के बाद लोडिंग स्क्रीन हटा लें
+                document.getElementById('loader').style.display = 'none';
+                event.target.value = ""; // Reset input so user can do it again
+            }
+        }
+    </script>
 </body>
 </html>
