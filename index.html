@@ -10,6 +10,7 @@
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
     <style>
+        /* Global Styles */
         body { font-family: 'Montserrat', sans-serif; background-color: #f6f5f2; margin: 0; padding: 0; color: #333; }
         header { background-color: #ffffff; padding: 15px 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 24px; font-weight: 700; color: #e5322d; text-decoration: none; cursor: pointer; }
@@ -18,20 +19,48 @@
         .nav-links a:hover { color: #e5322d; }
         .login-btn { background-color: #e5322d; color: white !important; padding: 10px 20px; border-radius: 6px; }
         
+        /* Section Toggle */
+        .page-section { display: none; animation: fadeIn 0.5s; }
+        .page-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Tools Page */
         .hero { text-align: center; padding: 60px 20px; }
         .hero h1 { font-size: 36px; color: #1f2937; margin-bottom: 10px; }
         .hero p { font-size: 18px; color: #4b5563; max-width: 600px; margin: 0 auto; }
-
         .tools-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; padding: 0 20px 60px 20px; }
         .tool-card { background: #ffffff; padding: 30px 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: all 0.3s ease; border: 1px solid #eaeaea; cursor: pointer; }
         .tool-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(229, 50, 45, 0.15); border-color: #e5322d; }
         .tool-icon { font-size: 45px; margin-bottom: 15px; }
         .tool-card h3 { font-size: 18px; color: #111; margin-bottom: 10px; }
         .tool-card p { font-size: 14px; color: #666; line-height: 1.5; }
-
         .working-badge { display:block; margin-top:10px; font-size:12px; font-weight:bold; color:#28a745; }
         .demo-badge { display:block; margin-top:10px; font-size:12px; font-weight:bold; color:#e5322d; }
 
+        /* Pricing Page */
+        .pricing-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        .price-card { background: #fff; padding: 40px 30px; border-radius: 15px; text-align: center; border: 1px solid #eaeaea; width: 280px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .price-card.pro { border-color: #e5322d; box-shadow: 0 10px 20px rgba(229, 50, 45, 0.15); transform: scale(1.05); }
+        .price-card h3 { font-size: 24px; margin-bottom: 15px; }
+        .price-card h2 { font-size: 40px; color: #e5322d; margin-bottom: 20px; }
+        .price-card h2 span { font-size: 16px; color: #888; }
+        .price-card ul { list-style: none; padding: 0; text-align: left; margin-bottom: 30px; }
+        .price-card ul li { padding: 10px 0; border-bottom: 1px solid #eee; font-size: 14px; }
+        .price-card ul li::before { content: "✔️ "; color: #28a745; }
+        .buy-btn { background: #111; color: #fff; padding: 12px 0; width: 100%; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: bold; }
+        .price-card.pro .buy-btn { background: #e5322d; }
+
+        /* Login Modal (Popup) */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 40px; border-radius: 12px; width: 320px; text-align: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #888; }
+        .modal-content h2 { margin-top: 0; margin-bottom: 20px; }
+        .form-group { text-align: left; margin-bottom: 15px; }
+        .form-group label { font-size: 14px; font-weight: 600; color: #333; }
+        .form-group input { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        .submit-login-btn { background: #e5322d; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 10px; }
+
+        /* Loader Overlay */
         #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 2000; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
         .spinner { border: 5px solid #f3f3f3; border-top: 5px solid #e5322d; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -39,9 +68,28 @@
 </head>
 <body>
 
+    <!-- Loading Screen -->
     <div id="loader">
         <div class="spinner"></div>
         <h2 id="loader-text" style="color: #333;">Processing...</h2>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeLogin()">×</span>
+            <h2>Log in to your account</h2>
+            <div class="form-group">
+                <label>Email address</label>
+                <input type="email" id="loginEmail" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPass" placeholder="Enter your password">
+            </div>
+            <button class="submit-login-btn" onclick="simulateLogin()">Log in</button>
+            <p style="font-size: 12px; color: #888; margin-top: 15px;">This is a secure demo login system.</p>
+        </div>
     </div>
 
     <!-- Hidden Inputs -->
@@ -50,75 +98,133 @@
     <input type="file" id="photoResizeInput" accept="image/*" style="display: none;" onchange="handlePhotoResize(event)">
     <input type="file" id="demoInput" style="display: none;" onchange="handleDemoTool(event)">
 
+    <!-- Header -->
     <header>
-        <div class="logo">📄 MyPDFTools</div>
+        <div class="logo" onclick="switchPage('home')">📄 MyPDFTools</div>
         <div class="nav-links">
-            <a href="#">Tools</a>
-            <a onclick="alert('Pricing API disconnected.')">Pricing</a>
-            <a class="login-btn" onclick="alert('Database connection required.')">Log in</a>
+            <a onclick="switchPage('home')">Tools</a>
+            <a onclick="switchPage('pricing')">Pricing</a>
+            <a class="login-btn" onclick="openLogin()">Log in</a>
         </div>
     </header>
 
-    <div class="hero">
-        <h1>All the PDF & Image Tools You Need</h1>
-        <p>Edit, convert, merge, and resize your files securely right here.</p>
-    </div>
-
-    <div class="tools-container">
-        
-        <!-- 1. MERGE PDF (100% Real) -->
-        <div class="tool-card" onclick="document.getElementById('mergeInput').click()">
-            <div class="tool-icon">🔗</div>
-            <h3>Merge PDF</h3>
-            <p>Combine multiple PDFs into a single document.</p>
-            <span class="working-badge">100% Working</span>
+    <!-- ==================== HOME / TOOLS SECTION ==================== -->
+    <div id="homeSection" class="page-section active">
+        <div class="hero">
+            <h1>All the PDF & Image Tools You Need</h1>
+            <p>Edit, convert, merge, and resize your files securely right here.</p>
         </div>
 
-        <!-- 2. IMAGE TO PDF (100% Real) -->
-        <div class="tool-card" onclick="document.getElementById('imgToPdfInput').click()">
-            <div class="tool-icon">🖼️</div>
-            <h3>Image to PDF</h3>
-            <p>Convert JPG/PNG images to a PDF file automatically fitting the size.</p>
-            <span class="working-badge">100% Working</span>
-        </div>
-
-        <!-- 3. PHOTO RESIZE (100% Real) -->
-        <div class="tool-card" onclick="document.getElementById('photoResizeInput').click()">
-            <div class="tool-icon">📐</div>
-            <h3>Photo Resizer</h3>
-            <p>Resize your photos to any custom pixel size worldwide.</p>
-            <span class="working-badge">100% Working</span>
-        </div>
-
-        <!-- 4. MS OFFICE TO PDF (Demo) -->
-        <div class="tool-card" onclick="startDemoTool('Converting Office File to PDF...')">
-            <div class="tool-icon">📊</div>
-            <h3>Word / Excel / PPT to PDF</h3>
-            <p>Convert Microsoft Office documents into PDF format.</p>
-            <span class="demo-badge">Requires Cloud Server</span>
-        </div>
-
-        <!-- 5. WATERMARK REMOVER (Demo) -->
-        <div class="tool-card" onclick="startDemoTool('AI Scanning for Watermarks...')">
-            <div class="tool-icon">🧽</div>
-            <h3>Watermark Remover</h3>
-            <p>Auto-detect and remove watermarks from a particular area using AI.</p>
-            <span class="demo-badge">Requires AI Server</span>
-        </div>
-
-        <!-- 6. FULL PDF EDITOR (Demo) -->
-        <div class="tool-card" onclick="startDemoTool('Loading Advanced PDF Editor...')">
-            <div class="tool-icon">✍️</div>
-            <h3>Full PDF Editor</h3>
-            <p>Edit text, images, and layout in any PDF completely.</p>
-            <span class="demo-badge">Requires Paid Engine</span>
+        <div class="tools-container">
+            <div class="tool-card" onclick="document.getElementById('mergeInput').click()">
+                <div class="tool-icon">🔗</div>
+                <h3>Merge PDF</h3>
+                <p>Combine multiple PDFs into a single document.</p>
+                <span class="working-badge">100% Working</span>
+            </div>
+            <div class="tool-card" onclick="document.getElementById('imgToPdfInput').click()">
+                <div class="tool-icon">🖼️</div>
+                <h3>Image to PDF</h3>
+                <p>Convert JPG/PNG images to a PDF file automatically fitting the size.</p>
+                <span class="working-badge">100% Working</span>
+            </div>
+            <div class="tool-card" onclick="document.getElementById('photoResizeInput').click()">
+                <div class="tool-icon">📐</div>
+                <h3>Photo Resizer</h3>
+                <p>Resize your photos to any custom pixel size worldwide.</p>
+                <span class="working-badge">100% Working</span>
+            </div>
+            <div class="tool-card" onclick="startDemoTool('Converting Office File to PDF...')">
+                <div class="tool-icon">📊</div>
+                <h3>Word / Excel / PPT to PDF</h3>
+                <p>Convert Microsoft Office documents into PDF format.</p>
+                <span class="demo-badge">Requires Cloud Server</span>
+            </div>
+            <div class="tool-card" onclick="startDemoTool('AI Scanning for Watermarks...')">
+                <div class="tool-icon">🧽</div>
+                <h3>Watermark Remover</h3>
+                <p>Auto-detect and remove watermarks from a particular area using AI.</p>
+                <span class="demo-badge">Requires AI Server</span>
+            </div>
+            <div class="tool-card" onclick="startDemoTool('Loading Advanced PDF Editor...')">
+                <div class="tool-icon">✍️</div>
+                <h3>Full PDF Editor</h3>
+                <p>Edit text, images, and layout in any PDF completely.</p>
+                <span class="demo-badge">Requires Paid Engine</span>
+            </div>
         </div>
     </div>
 
+    <!-- ==================== PRICING SECTION ==================== -->
+    <div id="pricingSection" class="page-section">
+        <div class="hero">
+            <h1>Simple, Transparent Pricing</h1>
+            <p>Choose the plan that best fits your document processing needs.</p>
+        </div>
+        <div class="pricing-container">
+            <!-- Free Plan -->
+            <div class="price-card">
+                <h3>Basic</h3>
+                <h2>$0 <span>/month</span></h2>
+                <ul>
+                    <li>Merge & Split PDFs</li>
+                    <li>Image to PDF</li>
+                    <li>Limited Photo Resizing</li>
+                    <li>Standard Support</li>
+                </ul>
+                <button class="buy-btn" onclick="openLogin()">Get Started</button>
+            </div>
+            <!-- Pro Plan -->
+            <div class="price-card pro">
+                <h3>Premium</h3>
+                <h2>$9 <span>/month</span></h2>
+                <ul>
+                    <li><strong>All Basic Features</strong></li>
+                    <li>Word/Excel to PDF Converter</li>
+                    <li>Unlimited Processing</li>
+                    <li>No Ads</li>
+                </ul>
+                <button class="buy-btn" onclick="openLogin()">Go Premium</button>
+            </div>
+            <!-- Business Plan -->
+            <div class="price-card">
+                <h3>Business</h3>
+                <h2>$29 <span>/month</span></h2>
+                <ul>
+                    <li><strong>All Premium Features</strong></li>
+                    <li>AI Watermark Remover</li>
+                    <li>Full PDF Text Editor</li>
+                    <li>API Access for Developers</li>
+                </ul>
+                <button class="buy-btn" onclick="openLogin()">Contact Sales</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Tools and UI -->
     <script>
         const { PDFDocument } = PDFLib;
 
-        // --- 1. REAL: MERGE PDF ---
+        // UI Logic: Switch Pages
+        function switchPage(page) {
+            document.getElementById('homeSection').classList.remove('active');
+            document.getElementById('pricingSection').classList.remove('active');
+            if(page === 'home') document.getElementById('homeSection').classList.add('active');
+            if(page === 'pricing') document.getElementById('pricingSection').classList.add('active');
+        }
+
+        // UI Logic: Login Modal
+        function openLogin() { document.getElementById('loginModal').style.display = 'flex'; }
+        function closeLogin() { document.getElementById('loginModal').style.display = 'none'; }
+        function simulateLogin() {
+            let email = document.getElementById('loginEmail').value;
+            let pass = document.getElementById('loginPass').value;
+            if(!email || !pass) { alert("Please enter email and password."); return; }
+            alert("Security Alert: User Database disconnected in Demo Mode. \n\nPlease connect a Backend Server (Firebase/MySQL) to authenticate users.");
+            closeLogin();
+        }
+
+        // Tool: Merge PDF
         async function handleMerge(event) {
             const files = event.target.files;
             if (files.length < 2) return;
@@ -136,7 +242,7 @@
             hideLoader(); event.target.value = "";
         }
 
-        // --- 2. REAL: IMAGE TO PDF ---
+        // Tool: Image to PDF
         async function handleImageToPdf(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -159,15 +265,12 @@
             hideLoader(); event.target.value = "";
         }
 
-        // --- 3. REAL: PHOTO RESIZER ---
+        // Tool: Photo Resizer
         function handlePhotoResize(event) {
             const file = event.target.files[0];
             if (!file) return;
-            
-            // Ask user for the new width
             const targetWidth = prompt("Enter the new width in pixels (e.g., 800, 1024):", "800");
             if (!targetWidth || isNaN(targetWidth)) { event.target.value = ""; return; }
-
             showLoader("Resizing Photo...");
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -176,11 +279,9 @@
                     const canvas = document.createElement('canvas');
                     const scale = targetWidth / img.width;
                     canvas.width = targetWidth;
-                    canvas.height = img.height * scale; // Keep ratio
-                    
+                    canvas.height = img.height * scale;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    
                     canvas.toBlob(function(blob) {
                         const url = URL.createObjectURL(blob);
                         const a = document.createElement('a');
@@ -196,19 +297,16 @@
             event.target.value = "";
         }
 
-        // --- 4. DEMO LOGIC FOR ADVANCED TOOLS ---
+        // Tool: Backend Demo
         let currentDemoText = "";
         function startDemoTool(text) {
             currentDemoText = text;
             document.getElementById('demoInput').click();
         }
-
         function handleDemoTool(event) {
             const file = event.target.files[0];
             if (!file) return;
             showLoader(currentDemoText);
-            
-            // Simulate 3 seconds of server processing
             setTimeout(() => {
                 hideLoader();
                 alert(`❌ Server Required!\n\nThis premium feature requires a backend server (Python/Node.js or AI Engine) to process the file. GitHub Pages only supports HTML/JS.`);
@@ -216,13 +314,12 @@
             }, 3000);
         }
 
-        // --- UTILITIES ---
+        // Utilities
         function showLoader(text) {
             document.getElementById('loader-text').innerText = text;
             document.getElementById('loader').style.display = 'flex';
         }
         function hideLoader() { document.getElementById('loader').style.display = 'none'; }
-        
         function downloadFile(bytes, filename, type) {
             const blob = new Blob([bytes], { type: type });
             const url = URL.createObjectURL(blob);
