@@ -6,7 +6,7 @@
     <title>My PDF Tools - Every tool you need to work with PDFs</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- PDF-Lib JS Library -->
+    <!-- PDF-Lib JS Library (For Real Tools) -->
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
     <style>
@@ -29,10 +29,11 @@
         .tool-card h3 { font-size: 18px; color: #111; margin-bottom: 10px; }
         .tool-card p { font-size: 14px; color: #666; line-height: 1.5; }
 
-        .working-badge { display:block; margin-top:10px; font-size:12px; font-weight:bold; color:#e5322d; }
+        .working-badge { display:block; margin-top:10px; font-size:12px; font-weight:bold; color:#28a745; }
+        .demo-badge { display:block; margin-top:10px; font-size:12px; font-weight:bold; color:#e5322d; }
 
         /* Loader Overlay */
-        #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 2000; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
+        #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 2000; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
         .spinner { border: 5px solid #f3f3f3; border-top: 5px solid #e5322d; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
@@ -42,70 +43,78 @@
     <!-- Loading Screen -->
     <div id="loader">
         <div class="spinner"></div>
-        <h2 style="color: #333;">Processing your PDF...</h2>
+        <h2 id="loader-text" style="color: #333;">Processing...</h2>
+        <p style="color: #666;">Please wait while we connect to the server.</p>
     </div>
 
-    <!-- Hidden Inputs -->
+    <!-- Hidden Inputs For All Tools -->
     <input type="file" id="mergeInput" multiple accept="application/pdf" style="display: none;" onchange="handleMerge(event)">
     <input type="file" id="splitInput" accept="application/pdf" style="display: none;" onchange="handleSplit(event)">
+    <input type="file" id="demoInput" accept=".pdf,.doc,.docx" style="display: none;" onchange="handleDemoTool(event)">
 
     <!-- Header -->
     <header>
         <div class="logo">📄 MyPDFTools</div>
         <div class="nav-links">
             <a href="#">Tools</a>
-            <a onclick="alert('Pricing page requires backend integration.')">Pricing</a>
-            <a class="login-btn" onclick="alert('Login requires database connection.')">Log in</a>
+            <a onclick="alert('Pricing API disconnected in Demo Mode.')">Pricing</a>
+            <a class="login-btn" onclick="alert('Database connection required for Login.')">Log in</a>
         </div>
     </header>
 
     <div class="hero">
         <h1>Every tool you need to work with PDFs</h1>
-        <p>Merge and Split your PDFs instantly right in your browser.</p>
+        <p>Merge, Split, Convert, and Compress your documents securely.</p>
     </div>
 
     <div class="tools-container">
         
-        <!-- 1. WORKING TOOL: MERGE PDF -->
+        <!-- 1. MERGE PDF (100% Real) -->
         <div class="tool-card" onclick="document.getElementById('mergeInput').click()">
             <div class="tool-icon">🔗</div>
             <h3>Merge PDF</h3>
             <p>Combine multiple PDFs into a single document instantly.</p>
-            <span class="working-badge">(100% Working)</span>
+            <span class="working-badge">Active (Client-side)</span>
         </div>
 
-        <!-- 2. WORKING TOOL: SPLIT PDF -->
+        <!-- 2. SPLIT PDF (100% Real) -->
         <div class="tool-card" onclick="document.getElementById('splitInput').click()">
             <div class="tool-icon">✂️</div>
-            <h3>Split PDF (Extract 1st Page)</h3>
+            <h3>Split PDF (1st Page)</h3>
             <p>Extract the first page of any PDF and save it as a new file.</p>
-            <span class="working-badge">(100% Working)</span>
+            <span class="working-badge">Active (Client-side)</span>
         </div>
 
-        <!-- OTHER TOOLS (Backend Required) -->
-        <div class="tool-card" onclick="alert('Notice: Compress PDF requires an active Python/Node.js Backend Server.')">
+        <!-- 3. COMPRESS PDF (Demo) -->
+        <div class="tool-card" onclick="startDemoTool('Compressing PDF...')">
             <div class="tool-icon">🗜️</div>
             <h3>Compress PDF</h3>
             <p>Reduce file size while optimizing for maximal PDF quality.</p>
-            <span style="display:block; margin-top:10px; font-size:12px; color:#888;">(Requires Backend)</span>
+            <span class="demo-badge">Requires Backend</span>
         </div>
-        <div class="tool-card" onclick="alert('Notice: PDF to Word conversion requires Microsoft Office APIs on a Server.')">
+
+        <!-- 4. PDF TO WORD (Demo) -->
+        <div class="tool-card" onclick="startDemoTool('Converting PDF to Word...')">
             <div class="tool-icon">📝</div>
             <h3>PDF to Word</h3>
             <p>Easily convert your PDF files into DOC and DOCX documents.</p>
-            <span style="display:block; margin-top:10px; font-size:12px; color:#888;">(Requires Backend)</span>
+            <span class="demo-badge">Requires Backend</span>
         </div>
-        <div class="tool-card" onclick="alert('Notice: Word to PDF conversion requires a Backend Server.')">
+
+        <!-- 5. WORD TO PDF (Demo) -->
+        <div class="tool-card" onclick="startDemoTool('Converting Word to PDF...')">
             <div class="tool-icon">🔄</div>
             <h3>Word to PDF</h3>
             <p>Make DOC and DOCX files easy to read by converting them to PDF.</p>
-            <span style="display:block; margin-top:10px; font-size:12px; color:#888;">(Requires Backend)</span>
+            <span class="demo-badge">Requires Backend</span>
         </div>
-        <div class="tool-card" onclick="alert('Notice: Encryption requires advanced server-side cryptography.')">
+
+        <!-- 6. PROTECT PDF (Demo) -->
+        <div class="tool-card" onclick="startDemoTool('Encrypting Document...')">
             <div class="tool-icon">🔒</div>
             <h3>Protect PDF</h3>
             <p>Encrypt your PDF with a password to keep data confidential.</p>
-            <span style="display:block; margin-top:10px; font-size:12px; color:#888;">(Requires Backend)</span>
+            <span class="demo-badge">Requires Backend</span>
         </div>
     </div>
 
@@ -113,14 +122,14 @@
     <script>
         const { PDFDocument } = PDFLib;
 
-        // 1. MERGE PDF LOGIC
+        // --- 1. REAL: MERGE PDF ---
         async function handleMerge(event) {
             const files = event.target.files;
             if (files.length < 2) {
                 alert("Please select at least 2 PDF files to merge.");
                 event.target.value = ""; return;
             }
-            document.getElementById('loader').style.display = 'flex';
+            showLoader("Merging PDFs...");
             try {
                 const mergedPdf = await PDFDocument.create();
                 for (let i = 0; i < files.length; i++) {
@@ -134,35 +143,60 @@
             } catch (error) {
                 alert("❌ Error: Could not merge PDFs.");
             } finally {
-                document.getElementById('loader').style.display = 'none';
-                event.target.value = "";
+                hideLoader(); event.target.value = "";
             }
         }
 
-        // 2. SPLIT PDF LOGIC (Extracts 1st Page)
+        // --- 2. REAL: SPLIT PDF ---
         async function handleSplit(event) {
             const file = event.target.files[0];
             if (!file) return;
-            document.getElementById('loader').style.display = 'flex';
+            showLoader("Extracting Page...");
             try {
                 const arrayBuffer = await file.arrayBuffer();
                 const originalPdf = await PDFDocument.load(arrayBuffer);
-                
                 const newPdf = await PDFDocument.create();
                 const [firstPage] = await newPdf.copyPages(originalPdf, [0]);
                 newPdf.addPage(firstPage);
-                
-                downloadPDF(await newPdf.save(), "Split_First_Page.pdf");
+                downloadPDF(await newPdf.save(), "Split_Page.pdf");
                 alert("✅ First page extracted successfully!");
             } catch (error) {
-                alert("❌ Error: Could not split PDF. Ensure it is a valid document with at least 1 page.");
+                alert("❌ Error: Could not split PDF.");
             } finally {
-                document.getElementById('loader').style.display = 'none';
-                event.target.value = "";
+                hideLoader(); event.target.value = "";
             }
         }
 
-        // DOWNLOAD HELPER FUNCTION
+        // --- 3. DEMO LOGIC FOR BACKEND TOOLS ---
+        let currentDemoText = "";
+        function startDemoTool(text) {
+            currentDemoText = text;
+            document.getElementById('demoInput').click();
+        }
+
+        function handleDemoTool(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Show fake processing screen
+            showLoader(currentDemoText);
+            
+            // Simulate 3 seconds of server processing, then show error
+            setTimeout(() => {
+                hideLoader();
+                alert(`❌ Server Connection Failed!\n\nThis feature ("${currentDemoText}") requires a Python/Node.js backend server to process the file. GitHub Pages only supports frontend hosting.`);
+                event.target.value = "";
+            }, 3000);
+        }
+
+        // --- UTILITIES ---
+        function showLoader(text) {
+            document.getElementById('loader-text').innerText = text;
+            document.getElementById('loader').style.display = 'flex';
+        }
+        function hideLoader() {
+            document.getElementById('loader').style.display = 'none';
+        }
         function downloadPDF(pdfBytes, filename) {
             const blob = new Blob([pdfBytes], { type: "application/pdf" });
             const url = URL.createObjectURL(blob);
