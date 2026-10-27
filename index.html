@@ -10,7 +10,6 @@
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
     <style>
-        /* Global Styles */
         body { font-family: 'Montserrat', sans-serif; background-color: #f6f5f2; margin: 0; padding: 0; color: #333; }
         header { background-color: #ffffff; padding: 15px 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 24px; font-weight: 700; color: #e5322d; text-decoration: none; cursor: pointer; }
@@ -19,15 +18,14 @@
         .nav-links a:hover { color: #e5322d; }
         .login-btn { background-color: #e5322d; color: white !important; padding: 10px 20px; border-radius: 6px; }
         
-        /* Section Toggle */
         .page-section { display: none; animation: fadeIn 0.5s; }
         .page-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Tools Page */
         .hero { text-align: center; padding: 60px 20px; }
         .hero h1 { font-size: 36px; color: #1f2937; margin-bottom: 10px; }
         .hero p { font-size: 18px; color: #4b5563; max-width: 600px; margin: 0 auto; }
+        
         .tools-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; padding: 0 20px 60px 20px; }
         .tool-card { background: #ffffff; padding: 30px 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: all 0.3s ease; border: 1px solid #eaeaea; cursor: pointer; }
         .tool-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(229, 50, 45, 0.15); border-color: #e5322d; }
@@ -36,29 +34,23 @@
         .tool-card p { font-size: 14px; color: #666; line-height: 1.5; }
         .working-badge { display:block; margin-top:10px; font-size:12px; font-weight:bold; color:#28a745; }
 
-        /* Pricing Page */
+        /* Pricing & Login UI */
         .pricing-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
         .price-card { background: #fff; padding: 40px 30px; border-radius: 15px; text-align: center; border: 1px solid #eaeaea; width: 280px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .price-card.pro { border-color: #e5322d; box-shadow: 0 10px 20px rgba(229, 50, 45, 0.15); transform: scale(1.05); }
+        .price-card.pro { border-color: #e5322d; transform: scale(1.05); }
         .price-card h3 { font-size: 24px; margin-bottom: 15px; }
         .price-card h2 { font-size: 40px; color: #e5322d; margin-bottom: 20px; }
-        .price-card h2 span { font-size: 16px; color: #888; }
         .price-card ul { list-style: none; padding: 0; text-align: left; margin-bottom: 30px; }
         .price-card ul li { padding: 10px 0; border-bottom: 1px solid #eee; font-size: 14px; }
-        .price-card ul li::before { content: "✔️ "; color: #28a745; }
-        .buy-btn { background: #111; color: #fff; padding: 12px 0; width: 100%; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: bold; }
+        .buy-btn { background: #111; color: #fff; padding: 12px 0; width: 100%; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
         .price-card.pro .buy-btn { background: #e5322d; }
-
-        /* Login Modal (Popup) */
+        
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 40px; border-radius: 12px; width: 320px; text-align: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .modal-content { background: white; padding: 40px; border-radius: 12px; width: 320px; text-align: center; position: relative; }
         .close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #888; }
-        .form-group { text-align: left; margin-bottom: 15px; }
-        .form-group label { font-size: 14px; font-weight: 600; color: #333; }
-        .form-group input { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
-        .submit-login-btn { background: #e5322d; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 10px; }
+        .form-group input { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .submit-login-btn { background: #e5322d; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 15px; }
 
-        /* Loader Overlay */
         #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 2000; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
         .spinner { border: 5px solid #f3f3f3; border-top: 5px solid #e5322d; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -66,7 +58,6 @@
 </head>
 <body>
 
-    <!-- Loading Screen -->
     <div id="loader">
         <div class="spinner"></div>
         <h2 id="loader-text" style="color: #333;">Processing...</h2>
@@ -76,28 +67,25 @@
     <div class="modal-overlay" id="loginModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeLogin()">×</span>
-            <h2>Log in to your account</h2>
-            <div class="form-group">
-                <label>Email address</label>
-                <input type="email" id="loginEmail" placeholder="Enter your email">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="loginPass" placeholder="Enter your password">
-            </div>
+            <h2>Log in</h2>
+            <div class="form-group"><input type="email" id="loginEmail" placeholder="Email"></div>
+            <div class="form-group"><input type="password" id="loginPass" placeholder="Password"></div>
             <button class="submit-login-btn" onclick="simulateLogin()">Log in</button>
         </div>
     </div>
 
-    <!-- Hidden Inputs -->
+    <!-- Hidden Inputs For 9 Tools -->
     <input type="file" id="mergeInput" multiple accept="application/pdf" style="display: none;" onchange="handleMerge(event)">
     <input type="file" id="imgToPdfInput" accept="image/png, image/jpeg" style="display: none;" onchange="handleImageToPdf(event)">
     <input type="file" id="photoResizeInput" accept="image/*" style="display: none;" onchange="handlePhotoResize(event)">
     <input type="file" id="splitInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'split')">
     <input type="file" id="rotateInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'rotate')">
     <input type="file" id="watermarkInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'watermark')">
+    <!-- 3 New Tools -->
+    <input type="file" id="pageNumberInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'pagenumber')">
+    <input type="file" id="removePageInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'remove')">
+    <input type="file" id="authorInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'author')">
 
-    <!-- Header -->
     <header>
         <div class="logo" onclick="switchPage('home')">📄 MyPDFTools</div>
         <div class="nav-links">
@@ -107,7 +95,6 @@
         </div>
     </header>
 
-    <!-- ==================== HOME / TOOLS SECTION ==================== -->
     <div id="homeSection" class="page-section active">
         <div class="hero">
             <h1>All the PDF & Image Tools You Need</h1>
@@ -115,80 +102,58 @@
         </div>
 
         <div class="tools-container">
+            <!-- Existing Tools -->
             <div class="tool-card" onclick="document.getElementById('mergeInput').click()">
-                <div class="tool-icon">🔗</div>
-                <h3>Merge PDF</h3>
-                <p>Combine multiple PDFs into a single document.</p>
-                <span class="working-badge">100% Working</span>
+                <div class="tool-icon">🔗</div><h3>Merge PDF</h3><p>Combine multiple PDFs.</p><span class="working-badge">Working</span>
             </div>
             <div class="tool-card" onclick="document.getElementById('imgToPdfInput').click()">
-                <div class="tool-icon">🖼️</div>
-                <h3>Image to PDF</h3>
-                <p>Convert JPG/PNG images to a PDF file perfectly.</p>
-                <span class="working-badge">100% Working</span>
+                <div class="tool-icon">🖼️</div><h3>Image to PDF</h3><p>Convert JPG/PNG to PDF.</p><span class="working-badge">Working</span>
             </div>
             <div class="tool-card" onclick="document.getElementById('photoResizeInput').click()">
-                <div class="tool-icon">📐</div>
-                <h3>Photo Resizer</h3>
-                <p>Resize your photos to any custom pixel size worldwide.</p>
-                <span class="working-badge">100% Working</span>
+                <div class="tool-icon">📐</div><h3>Photo Resizer</h3><p>Resize your photos.</p><span class="working-badge">Working</span>
             </div>
             <div class="tool-card" onclick="document.getElementById('splitInput').click()">
-                <div class="tool-icon">✂️</div>
-                <h3>Extract 1st Page</h3>
-                <p>Extract the first page of any PDF and save it as a new file.</p>
-                <span class="working-badge">100% Working</span>
+                <div class="tool-icon">✂️</div><h3>Extract 1st Page</h3><p>Extract the first page.</p><span class="working-badge">Working</span>
             </div>
             <div class="tool-card" onclick="document.getElementById('rotateInput').click()">
-                <div class="tool-icon">🔄</div>
-                <h3>Rotate PDF</h3>
-                <p>Rotate all pages of your PDF document by 90 degrees.</p>
-                <span class="working-badge">100% Working</span>
+                <div class="tool-icon">🔄</div><h3>Rotate PDF</h3><p>Rotate pages by 90 deg.</p><span class="working-badge">Working</span>
             </div>
             <div class="tool-card" onclick="document.getElementById('watermarkInput').click()">
-                <div class="tool-icon">©️</div>
-                <h3>Add Text Stamp</h3>
-                <p>Add your own custom text watermark to all pages of a PDF.</p>
-                <span class="working-badge">100% Working</span>
+                <div class="tool-icon">©️</div><h3>Add Text Stamp</h3><p>Custom text watermark.</p><span class="working-badge">Working</span>
+            </div>
+            <!-- 3 New Tools -->
+            <div class="tool-card" onclick="document.getElementById('pageNumberInput').click()">
+                <div class="tool-icon">🔢</div><h3>Add Page Numbers</h3><p>Add numbers to all pages.</p><span class="working-badge">New & Working</span>
+            </div>
+            <div class="tool-card" onclick="document.getElementById('removePageInput').click()">
+                <div class="tool-icon">🗑️</div><h3>Remove Last Page</h3><p>Delete the final page.</p><span class="working-badge">New & Working</span>
+            </div>
+            <div class="tool-card" onclick="document.getElementById('authorInput').click()">
+                <div class="tool-icon">👤</div><h3>Change Author</h3><p>Set yourself as PDF owner.</p><span class="working-badge">New & Working</span>
             </div>
         </div>
     </div>
 
-    <!-- ==================== PRICING SECTION ==================== -->
+    <!-- Pricing Section -->
     <div id="pricingSection" class="page-section">
-        <div class="hero">
-            <h1>Simple, Transparent Pricing</h1>
-            <p>Choose the plan that best fits your needs.</p>
-        </div>
+        <div class="hero"><h1>Transparent Pricing</h1></div>
         <div class="pricing-container">
             <div class="price-card">
-                <h3>Basic</h3>
-                <h2>$0 <span>/month</span></h2>
-                <ul>
-                    <li>Merge & Split PDFs</li>
-                    <li>Image to PDF</li>
-                    <li>Photo Resizing</li>
-                </ul>
+                <h3>Basic</h3><h2>$0 <span>/mo</span></h2>
+                <ul><li>Merge, Split, Watermark</li><li>Basic Photo Tools</li></ul>
                 <button class="buy-btn" onclick="openLogin()">Get Started</button>
             </div>
             <div class="price-card pro">
-                <h3>Premium</h3>
-                <h2>$9 <span>/month</span></h2>
-                <ul>
-                    <li><strong>All Basic Features</strong></li>
-                    <li>Unlimited Processing</li>
-                    <li>No Ads</li>
-                </ul>
+                <h3>Premium</h3><h2>$9 <span>/mo</span></h2>
+                <ul><li>All 9 Working Features</li><li>Unlimited Processing</li></ul>
                 <button class="buy-btn" onclick="openLogin()">Go Premium</button>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript for Tools and UI -->
     <script>
         const { PDFDocument, rgb, degrees } = PDFLib;
 
-        // UI Logic
         function switchPage(page) {
             document.getElementById('homeSection').classList.remove('active');
             document.getElementById('pricingSection').classList.remove('active');
@@ -197,149 +162,99 @@
         }
         function openLogin() { document.getElementById('loginModal').style.display = 'flex'; }
         function closeLogin() { document.getElementById('loginModal').style.display = 'none'; }
-        function simulateLogin() {
-            let email = document.getElementById('loginEmail').value;
-            let pass = document.getElementById('loginPass').value;
-            if(!email || !pass) { alert("Please enter email and password."); return; }
-            alert("Security Alert: User Database disconnected in Demo Mode.");
-            closeLogin();
-        }
-
-        // Tools Logic
-        async function handleMerge(event) {
-            const files = event.target.files;
-            if (files.length < 2) return;
-            showLoader("Merging PDFs...");
-            try {
-                const mergedPdf = await PDFDocument.create();
-                for (let i = 0; i < files.length; i++) {
-                    const arrayBuffer = await files[i].arrayBuffer();
-                    const pdf = await PDFDocument.load(arrayBuffer);
-                    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-                    copiedPages.forEach((page) => mergedPdf.addPage(page));
-                }
-                downloadFile(await mergedPdf.save(), "Merged_Document.pdf", "application/pdf");
-            } catch (e) { alert("Error merging PDFs."); }
-            hideLoader(); event.target.value = "";
-        }
-
-        async function handleImageToPdf(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            showLoader("Converting Image to PDF...");
-            try {
-                const imgBuffer = await file.arrayBuffer();
-                const pdfDoc = await PDFDocument.create();
-                let img;
-                if (file.type === 'image/jpeg' || file.type === 'image/jpg') {
-                    img = await pdfDoc.embedJpg(imgBuffer);
-                } else if (file.type === 'image/png') {
-                    img = await pdfDoc.embedPng(imgBuffer);
-                } else {
-                    throw new Error("Only JPG and PNG supported.");
-                }
-                const page = pdfDoc.addPage([img.width, img.height]);
-                page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
-                downloadFile(await pdfDoc.save(), "Converted_Image.pdf", "application/pdf");
-            } catch (e) { alert(e.message); }
-            hideLoader(); event.target.value = "";
-        }
-
-        function handlePhotoResize(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const targetWidth = prompt("Enter the new width in pixels (e.g., 800, 1024):", "800");
-            if (!targetWidth || isNaN(targetWidth)) { event.target.value = ""; return; }
-            showLoader("Resizing Photo...");
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const scale = targetWidth / img.width;
-                    canvas.width = targetWidth;
-                    canvas.height = img.height * scale;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    canvas.toBlob(function(blob) {
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = "Resized_Photo.jpg";
-                        a.click();
-                        hideLoader();
-                    }, 'image/jpeg', 0.9);
-                }
-                img.src = e.target.result;
-            }
-            reader.readAsDataURL(file);
-            event.target.value = "";
-        }
-
-        async function handleProcess(event, action) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            // NEW: User Custom Watermark Logic
-            let customWatermarkText = "";
-            if (action === 'watermark') {
-                customWatermarkText = prompt("Enter your custom text for the watermark:", "Confidential");
-                if (!customWatermarkText) { 
-                    event.target.value = ""; 
-                    return; // Agar user ne Cancel kar diya toh operation cancel ho jayega
-                }
-            }
-
-            showLoader("Processing...");
-            try {
-                const arrayBuffer = await file.arrayBuffer();
-                const pdfDoc = await PDFDocument.load(arrayBuffer);
-                let finalPdf = pdfDoc;
-                let filename = "Processed_Document.pdf";
-
-                if (action === 'split') {
-                    finalPdf = await PDFDocument.create();
-                    const [firstPage] = await finalPdf.copyPages(pdfDoc, [0]);
-                    finalPdf.addPage(firstPage);
-                    filename = "Split_1st_Page.pdf";
-                } 
-                else if (action === 'rotate') {
-                    const pages = pdfDoc.getPages();
-                    pages.forEach(page => page.setRotation(degrees(90)));
-                    filename = "Rotated_Document.pdf";
-                }
-                else if (action === 'watermark') {
-                    const pages = pdfDoc.getPages();
-                    // Yeh code sabhi pages par watermark lagayega
-                    pages.forEach(page => {
-                        const { width, height } = page.getSize();
-                        page.drawText(customWatermarkText, {
-                            x: 50, y: height / 2, size: 50, color: rgb(0.9, 0.1, 0.1), opacity: 0.3, rotate: degrees(-45),
-                        });
-                    });
-                    filename = "Stamped_Document.pdf";
-                }
-                downloadFile(await finalPdf.save(), filename, "application/pdf");
-            } catch (error) {
-                alert("❌ Error processing PDF.");
-            } finally {
-                hideLoader(); event.target.value = "";
-            }
-        }
-
-        // Utilities
-        function showLoader(text) {
-            document.getElementById('loader-text').innerText = text;
-            document.getElementById('loader').style.display = 'flex';
-        }
+        function simulateLogin() { alert("Demo Mode: Login disabled."); closeLogin(); }
+        function showLoader(text) { document.getElementById('loader-text').innerText = text; document.getElementById('loader').style.display = 'flex'; }
         function hideLoader() { document.getElementById('loader').style.display = 'none'; }
         function downloadFile(bytes, filename, type) {
             const blob = new Blob([bytes], { type: type });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = filename;
-            a.click();
+            const a = document.createElement("a"); a.href = url; a.download = filename; a.click();
+        }
+
+        async function handleMerge(event) {
+            if (event.target.files.length < 2) return;
+            showLoader("Merging PDFs...");
+            try {
+                const mergedPdf = await PDFDocument.create();
+                for (let file of event.target.files) {
+                    const pdf = await PDFDocument.load(await file.arrayBuffer());
+                    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+                    copiedPages.forEach(p => mergedPdf.addPage(p));
+                }
+                downloadFile(await mergedPdf.save(), "Merged.pdf", "application/pdf");
+            } catch (e) {} hideLoader(); event.target.value = "";
+        }
+
+        async function handleImageToPdf(event) {
+            const file = event.target.files[0]; if (!file) return;
+            showLoader("Converting to PDF...");
+            try {
+                const pdfDoc = await PDFDocument.create();
+                let img = file.type.includes('png') ? await pdfDoc.embedPng(await file.arrayBuffer()) : await pdfDoc.embedJpg(await file.arrayBuffer());
+                pdfDoc.addPage([img.width, img.height]).drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
+                downloadFile(await pdfDoc.save(), "Image.pdf", "application/pdf");
+            } catch (e) {} hideLoader(); event.target.value = "";
+        }
+
+        function handlePhotoResize(event) {
+            const file = event.target.files[0]; if (!file) return;
+            const targetWidth = prompt("Enter new width in pixels (e.g., 800):", "800");
+            if (!targetWidth || isNaN(targetWidth)) return;
+            showLoader("Resizing...");
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = new Image(); img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = targetWidth; canvas.height = img.height * (targetWidth / img.width);
+                    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                    canvas.toBlob(blob => { downloadFile(blob, "Resized.jpg", 'image/jpeg'); hideLoader(); }, 'image/jpeg');
+                }; img.src = e.target.result;
+            }; reader.readAsDataURL(file); event.target.value = "";
+        }
+
+        async function handleProcess(event, action) {
+            const file = event.target.files[0]; if (!file) return;
+            let customText = "";
+            if (action === 'watermark') customText = prompt("Enter watermark text:", "Confidential");
+            if (action === 'author') customText = prompt("Enter Author/Owner Name:", "Your Name");
+            if ((action === 'watermark' || action === 'author') && !customText) { event.target.value = ""; return; }
+
+            showLoader("Processing...");
+            try {
+                const pdfDoc = await PDFDocument.load(await file.arrayBuffer());
+                let finalPdf = pdfDoc; let filename = "Processed.pdf";
+
+                if (action === 'split') {
+                    finalPdf = await PDFDocument.create();
+                    finalPdf.addPage((await finalPdf.copyPages(pdfDoc, [0]))[0]);
+                    filename = "Split.pdf";
+                } 
+                else if (action === 'rotate') {
+                    pdfDoc.getPages().forEach(p => p.setRotation(degrees(90)));
+                    filename = "Rotated.pdf";
+                }
+                else if (action === 'watermark') {
+                    pdfDoc.getPages().forEach(p => {
+                        const { height } = p.getSize();
+                        p.drawText(customText, { x: 50, y: height/2, size: 50, color: rgb(0.9, 0.1, 0.1), opacity: 0.3, rotate: degrees(-45) });
+                    }); filename = "Watermarked.pdf";
+                }
+                else if (action === 'pagenumber') {
+                    pdfDoc.getPages().forEach((p, idx) => {
+                        p.drawText(`Page ${idx + 1}`, { x: 50, y: 30, size: 12, color: rgb(0, 0, 0) });
+                    }); filename = "Page_Numbers.pdf";
+                }
+                else if (action === 'remove') {
+                    if(pdfDoc.getPageCount() > 1) pdfDoc.removePage(pdfDoc.getPageCount() - 1);
+                    filename = "Removed_Last_Page.pdf";
+                }
+                else if (action === 'author') {
+                    pdfDoc.setTitle("Edited by MyPDFTools");
+                    pdfDoc.setAuthor(customText);
+                    filename = "Updated_Metadata.pdf";
+                }
+                downloadFile(await finalPdf.save(), filename, "application/pdf");
+            } catch (e) { alert("Error processing PDF."); } finally { hideLoader(); event.target.value = ""; }
         }
     </script>
 </body>
