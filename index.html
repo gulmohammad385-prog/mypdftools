@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My PDF Tools - Pro Edition</title>
+    <title>My PDF Tools - 100% Working</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- PDF-Lib JS Library -->
@@ -23,7 +23,7 @@
         .page-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Tools Container */
+        /* Tools Page */
         .hero { text-align: center; padding: 60px 20px; }
         .hero h1 { font-size: 36px; color: #1f2937; margin-bottom: 10px; }
         .hero p { font-size: 18px; color: #4b5563; max-width: 600px; margin: 0 auto; }
@@ -35,17 +35,27 @@
         .tool-card p { font-size: 14px; color: #666; line-height: 1.5; }
         .working-badge { display:block; margin-top:10px; font-size:12px; font-weight:bold; color:#28a745; }
 
-        /* Modals (Popups) for Advanced Tools */
+        /* Pricing Page */
+        .pricing-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        .price-card { background: #fff; padding: 40px 30px; border-radius: 15px; text-align: center; border: 1px solid #eaeaea; width: 280px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .price-card.pro { border-color: #e5322d; transform: scale(1.05); }
+        .price-card h3 { font-size: 24px; margin-bottom: 15px; }
+        .price-card h2 { font-size: 40px; color: #e5322d; margin-bottom: 20px; }
+        .price-card ul { list-style: none; padding: 0; text-align: left; margin-bottom: 30px; }
+        .price-card ul li { padding: 10px 0; border-bottom: 1px solid #eee; font-size: 14px; }
+        .buy-btn { background: #111; color: #fff; padding: 12px 0; width: 100%; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .price-card.pro .buy-btn { background: #e5322d; }
+
+        /* Modals (Popups) */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 3000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 30px; border-radius: 12px; width: 400px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .modal-content h2 { margin-top: 0; text-align: center; color: #111; font-size: 22px; margin-bottom: 20px; }
         .close-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #888; line-height: 1; }
-        .form-group { margin-bottom: 15px; }
+        .form-group { margin-bottom: 15px; text-align: left; }
         .form-group label { display: block; font-size: 14px; font-weight: 600; color: #333; margin-bottom: 5px; }
         .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
         .flex-row { display: flex; gap: 10px; }
         .action-btn { background: #e5322d; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; }
-        .action-btn:hover { background: #c82320; }
 
         /* Loader */
         #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 4000; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
@@ -61,11 +71,22 @@
         <h2 id="loader-text" style="color: #333;">Processing...</h2>
     </div>
 
-    <!-- 1. PRO RESIZE MODAL -->
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-content" style="width: 320px;">
+            <span class="close-btn" onclick="closeModal('loginModal')">×</span>
+            <h2>Log in</h2>
+            <div class="form-group"><input type="email" id="loginEmail" placeholder="Email"></div>
+            <div class="form-group"><input type="password" id="loginPass" placeholder="Password"></div>
+            <button class="action-btn" onclick="simulateLogin()">Log in</button>
+        </div>
+    </div>
+
+    <!-- ADVANCED RESIZE MODAL -->
     <div class="modal-overlay" id="resizeModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('resizeModal')">×</span>
-            <h2>Pro Photo Resizer</h2>
+            <h2>Advanced Photo Resizer</h2>
             <div class="form-group">
                 <label>1. Select Image</label>
                 <input type="file" id="resizeFileInput" accept="image/*">
@@ -94,11 +115,11 @@
         </div>
     </div>
 
-    <!-- 2. PRO WATERMARK MODAL -->
+    <!-- ADVANCED WATERMARK MODAL -->
     <div class="modal-overlay" id="watermarkModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('watermarkModal')">×</span>
-            <h2>Pro PDF Watermark</h2>
+            <h2>Advanced PDF Watermark</h2>
             <div class="form-group">
                 <label>1. Select PDF File</label>
                 <input type="file" id="wmPdfInput" accept="application/pdf">
@@ -111,19 +132,16 @@
                 </select>
             </div>
             
-            <!-- Text Settings -->
             <div class="form-group" id="wmTextGroup">
                 <label>Enter Text</label>
                 <input type="text" id="wmTextValue" placeholder="e.g. CONFIDENTIAL" value="CONFIDENTIAL">
             </div>
             
-            <!-- Image Settings -->
             <div class="form-group" id="wmImageGroup" style="display: none;">
                 <label>Upload Logo (PNG/JPG)</label>
                 <input type="file" id="wmImageInput" accept="image/png, image/jpeg">
             </div>
 
-            <!-- Position & Style Settings -->
             <div class="flex-row">
                 <div class="form-group" style="width: 50%;">
                     <label>Position</label>
@@ -138,93 +156,123 @@
                     <input type="number" id="wmOpacity" step="0.1" min="0.1" max="1" value="0.4">
                 </div>
             </div>
-            
             <button class="action-btn" onclick="processAdvancedWatermark()">Apply Watermark</button>
         </div>
     </div>
 
-    <!-- Hidden Inputs For Direct Tools (Merge, ImageToPdf, etc.) -->
+    <!-- Hidden Inputs For Other 7 Direct Tools -->
     <input type="file" id="mergeInput" multiple accept="application/pdf" style="display: none;" onchange="handleMerge(event)">
     <input type="file" id="imgToPdfInput" accept="image/png, image/jpeg" style="display: none;" onchange="handleImageToPdf(event)">
-    <input type="file" id="splitInput" accept="application/pdf" style="display: none;" onchange="handleSimplePDFTool(event, 'split')">
-    <input type="file" id="rotateInput" accept="application/pdf" style="display: none;" onchange="handleSimplePDFTool(event, 'rotate')">
+    <input type="file" id="splitInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'split')">
+    <input type="file" id="rotateInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'rotate')">
+    <input type="file" id="pageNumberInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'pagenumber')">
+    <input type="file" id="removePageInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'remove')">
+    <input type="file" id="authorInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'author')">
 
     <!-- Header -->
     <header>
-        <div class="logo">📄 MyPDFTools</div>
+        <div class="logo" onclick="switchPage('home')">📄 MyPDFTools</div>
         <div class="nav-links">
-            <a href="#">Tools</a>
-            <a href="#" onclick="alert('Demo Pricing')">Pricing</a>
-            <a class="login-btn" onclick="alert('Login Required')">Log in</a>
+            <a onclick="switchPage('home')">Tools</a>
+            <a onclick="switchPage('pricing')">Pricing</a>
+            <a class="login-btn" onclick="openModal('loginModal')">Log in</a>
         </div>
     </header>
 
-    <div class="hero">
-        <h1>Advanced PDF & Image Tools</h1>
-        <p>100% Free. Securely process files directly in your browser.</p>
+    <!-- TOOLS SECTION (9 Tools) -->
+    <div id="homeSection" class="page-section active">
+        <div class="hero">
+            <h1>All the PDF & Image Tools You Need</h1>
+            <p>100% Free and Working Tools right in your browser.</p>
+        </div>
+
+        <div class="tools-container">
+            <div class="tool-card" onclick="document.getElementById('mergeInput').click()">
+                <div class="tool-icon">🔗</div><h3>Merge PDF</h3><p>Combine multiple PDFs.</p><span class="working-badge">Working</span>
+            </div>
+            <div class="tool-card" onclick="document.getElementById('imgToPdfInput').click()">
+                <div class="tool-icon">🖼️</div><h3>Image to PDF</h3><p>Convert JPG/PNG to PDF.</p><span class="working-badge">Working</span>
+            </div>
+            
+            <!-- ADVANCED PHOTO RESIZER TRIGGERS POPUP -->
+            <div class="tool-card" onclick="openModal('resizeModal')">
+                <div class="tool-icon">📐</div><h3>Photo Resizer</h3><p>Resize your photos to any size.</p><span class="working-badge">Advanced Options</span>
+            </div>
+            
+            <div class="tool-card" onclick="document.getElementById('splitInput').click()">
+                <div class="tool-icon">✂️</div><h3>Extract 1st Page</h3><p>Extract the first page.</p><span class="working-badge">Working</span>
+            </div>
+            <div class="tool-card" onclick="document.getElementById('rotateInput').click()">
+                <div class="tool-icon">🔄</div><h3>Rotate PDF</h3><p>Rotate pages by 90 deg.</p><span class="working-badge">Working</span>
+            </div>
+            
+            <!-- ADVANCED WATERMARK TRIGGERS POPUP -->
+            <div class="tool-card" onclick="openModal('watermarkModal')">
+                <div class="tool-icon">©️</div><h3>Add Watermark</h3><p>Add custom text or Logo (PNG).</p><span class="working-badge">Advanced Options</span>
+            </div>
+
+            <div class="tool-card" onclick="document.getElementById('pageNumberInput').click()">
+                <div class="tool-icon">🔢</div><h3>Add Page Numbers</h3><p>Add numbers to all pages.</p><span class="working-badge">Working</span>
+            </div>
+            <div class="tool-card" onclick="document.getElementById('removePageInput').click()">
+                <div class="tool-icon">🗑️</div><h3>Remove Last Page</h3><p>Delete the final page.</p><span class="working-badge">Working</span>
+            </div>
+            <div class="tool-card" onclick="document.getElementById('authorInput').click()">
+                <div class="tool-icon">👤</div><h3>Change Author</h3><p>Set yourself as PDF owner.</p><span class="working-badge">Working</span>
+            </div>
+        </div>
     </div>
 
-    <!-- Tools Grid -->
-    <div class="tools-container">
-        <div class="tool-card" onclick="document.getElementById('mergeInput').click()">
-            <div class="tool-icon">🔗</div><h3>Merge PDF</h3><p>Combine multiple PDFs.</p><span class="working-badge">Working</span>
-        </div>
-        <div class="tool-card" onclick="document.getElementById('imgToPdfInput').click()">
-            <div class="tool-icon">🖼️</div><h3>Image to PDF</h3><p>Convert JPG/PNG to PDF.</p><span class="working-badge">Working</span>
-        </div>
-        
-        <!-- PRO PHOTO RESIZER TRIGGER -->
-        <div class="tool-card" onclick="openModal('resizeModal')" style="border: 2px solid #e5322d;">
-            <div class="tool-icon">📐</div><h3>Pro Photo Resizer</h3><p>Resize images to custom or standard sizes.</p><span class="working-badge">Advanced Tool</span>
-        </div>
-
-        <div class="tool-card" onclick="document.getElementById('splitInput').click()">
-            <div class="tool-icon">✂️</div><h3>Extract 1st Page</h3><p>Extract the first page.</p><span class="working-badge">Working</span>
-        </div>
-        
-        <!-- PRO WATERMARK TRIGGER -->
-        <div class="tool-card" onclick="openModal('watermarkModal')" style="border: 2px solid #e5322d;">
-            <div class="tool-icon">©️</div><h3>Pro Watermark</h3><p>Add custom text or your own logo PNG.</p><span class="working-badge">Advanced Tool</span>
-        </div>
-
-        <div class="tool-card" onclick="document.getElementById('rotateInput').click()">
-            <div class="tool-icon">🔄</div><h3>Rotate PDF</h3><p>Rotate pages by 90 deg.</p><span class="working-badge">Working</span>
+    <!-- PRICING SECTION -->
+    <div id="pricingSection" class="page-section">
+        <div class="hero"><h1>Transparent Pricing</h1></div>
+        <div class="pricing-container">
+            <div class="price-card">
+                <h3>Basic</h3><h2>$0 <span>/mo</span></h2>
+                <ul><li>Merge, Split, Watermark</li><li>Basic Photo Tools</li></ul>
+                <button class="buy-btn" onclick="openModal('loginModal')">Get Started</button>
+            </div>
+            <div class="price-card pro">
+                <h3>Premium</h3><h2>$9 <span>/mo</span></h2>
+                <ul><li>All 9 Working Features</li><li>Unlimited Processing</li></ul>
+                <button class="buy-btn" onclick="openModal('loginModal')">Go Premium</button>
+            </div>
         </div>
     </div>
 
-    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         const { PDFDocument, rgb, degrees } = PDFLib;
 
-        // Modal Controls
+        // UI & Modals Logic
+        function switchPage(page) {
+            document.getElementById('homeSection').classList.remove('active');
+            document.getElementById('pricingSection').classList.remove('active');
+            if(page === 'home') document.getElementById('homeSection').classList.add('active');
+            if(page === 'pricing') document.getElementById('pricingSection').classList.add('active');
+        }
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function simulateLogin() { alert("Demo Mode: Login disabled."); closeModal('loginModal'); }
         function showLoader(text) { document.getElementById('loader-text').innerText = text; document.getElementById('loader').style.display = 'flex'; }
         function hideLoader() { document.getElementById('loader').style.display = 'none'; }
-        
-        // Download Helper
         function downloadFile(bytes, filename, type) {
             const blob = new Blob([bytes], { type: type });
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a"); a.href = url; a.download = filename; a.click();
         }
 
-        // ================= 1. PRO RESIZER LOGIC =================
+        // ================= ADVANCED RESIZER =================
         function updateResizeInputs() {
             const preset = document.getElementById('resizePreset').value;
             const wInput = document.getElementById('resizeWidth');
             const hInput = document.getElementById('resizeHeight');
             if(preset === 'custom') { wInput.value = ''; hInput.value = ''; wInput.disabled = false; hInput.disabled = false; }
-            else {
-                const parts = preset.split('x');
-                wInput.value = parts[0]; hInput.value = parts[1];
-            }
+            else { const parts = preset.split('x'); wInput.value = parts[0]; hInput.value = parts[1]; }
         }
-
         function processAdvancedResize() {
             const fileInput = document.getElementById('resizeFileInput');
             if(!fileInput.files[0]) { alert("Please select an image first!"); return; }
-            
             const targetW = parseInt(document.getElementById('resizeWidth').value);
             const targetH = parseInt(document.getElementById('resizeHeight').value);
             if(!targetW || !targetH) { alert("Please enter valid width and height!"); return; }
@@ -235,24 +283,17 @@
                 const img = new Image(); 
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
-                    canvas.width = targetW; 
-                    canvas.height = targetH;
-                    const ctx = canvas.getContext('2d');
-                    // Draw image stretched to fit exact dimensions
-                    ctx.drawImage(img, 0, 0, targetW, targetH);
-                    
+                    canvas.width = targetW; canvas.height = targetH;
+                    canvas.getContext('2d').drawImage(img, 0, 0, targetW, targetH);
                     canvas.toBlob(blob => { 
                         downloadFile(blob, "Resized_Pro.jpg", 'image/jpeg'); 
-                        hideLoader(); 
-                        closeModal('resizeModal');
+                        hideLoader(); closeModal('resizeModal');
                     }, 'image/jpeg', 0.95);
-                }; 
-                img.src = e.target.result;
-            }; 
-            reader.readAsDataURL(fileInput.files[0]);
+                }; img.src = e.target.result;
+            }; reader.readAsDataURL(fileInput.files[0]);
         }
 
-        // ================= 2. PRO WATERMARK LOGIC =================
+        // ================= ADVANCED WATERMARK =================
         function toggleWmType() {
             const type = document.getElementById('wmType').value;
             if(type === 'text') {
@@ -263,7 +304,6 @@
                 document.getElementById('wmImageGroup').style.display = 'block';
             }
         }
-
         async function processAdvancedWatermark() {
             const pdfFile = document.getElementById('wmPdfInput').files[0];
             if(!pdfFile) { alert("Please select a PDF file!"); return; }
@@ -272,69 +312,40 @@
             const opacityVal = parseFloat(document.getElementById('wmOpacity').value) || 0.4;
             const positionVal = document.getElementById('wmPosition').value;
             
-            showLoader("Applying Pro Watermark...");
+            showLoader("Applying Watermark...");
             try {
                 const pdfDoc = await PDFDocument.load(await pdfFile.arrayBuffer());
-                const pages = pdfDoc.getPages();
-
-                // If Logo is selected
-                let logoImage = null;
-                let logoDims = null;
+                
+                let logoImage = null, logoDims = null;
                 if(wmType === 'image') {
                     const imgFile = document.getElementById('wmImageInput').files[0];
-                    if(!imgFile) { alert("Please upload a Logo/Image!"); hideLoader(); return; }
+                    if(!imgFile) { alert("Please upload a Logo!"); hideLoader(); return; }
                     const imgBytes = await imgFile.arrayBuffer();
-                    if(imgFile.type.includes('png')) {
-                        logoImage = await pdfDoc.embedPng(imgBytes);
-                    } else {
-                        logoImage = await pdfDoc.embedJpg(imgBytes);
-                    }
-                    // Scale logo to a reasonable size (e.g. 150px max width)
-                    const scaleFactor = 150 / logoImage.width;
-                    logoDims = logoImage.scale(scaleFactor);
+                    logoImage = imgFile.type.includes('png') ? await pdfDoc.embedPng(imgBytes) : await pdfDoc.embedJpg(imgBytes);
+                    logoDims = logoImage.scale(150 / logoImage.width);
                 }
-
                 const wmText = document.getElementById('wmTextValue').value;
 
-                pages.forEach(page => {
+                pdfDoc.getPages().forEach(page => {
                     const { width, height } = page.getSize();
                     let posX = 50, posY = 50;
-
-                    // Calculate Positions
-                    if(positionVal === 'center') {
-                        posX = width / 2 - 100; posY = height / 2;
-                    } else if(positionVal === 'bottom-right') {
-                        posX = width - 200; posY = 50;
-                    } else if(positionVal === 'top-left') {
-                        posX = 50; posY = height - 100;
-                    }
+                    if(positionVal === 'center') { posX = width/2 - 100; posY = height/2; } 
+                    else if(positionVal === 'bottom-right') { posX = width - 200; posY = 50; } 
+                    else if(positionVal === 'top-left') { posX = 50; posY = height - 100; }
 
                     if(wmType === 'text') {
-                        page.drawText(wmText, {
-                            x: posX, y: posY, size: 40,
-                            color: rgb(0.8, 0.2, 0.2),
-                            opacity: opacityVal,
-                            rotate: positionVal === 'center' ? degrees(-45) : degrees(0)
-                        });
+                        page.drawText(wmText, { x: posX, y: posY, size: 40, color: rgb(0.8, 0.2, 0.2), opacity: opacityVal, rotate: positionVal === 'center' ? degrees(-45) : degrees(0) });
                     } else if (wmType === 'image' && logoImage) {
-                        page.drawImage(logoImage, {
-                            x: posX, y: posY,
-                            width: logoDims.width, height: logoDims.height,
-                            opacity: opacityVal
-                        });
+                        page.drawImage(logoImage, { x: posX, y: posY, width: logoDims.width, height: logoDims.height, opacity: opacityVal });
                     }
                 });
-
-                downloadFile(await pdfDoc.save(), "Pro_Watermarked.pdf", "application/pdf");
+                downloadFile(await pdfDoc.save(), "Watermarked.pdf", "application/pdf");
                 closeModal('watermarkModal');
-            } catch (e) { 
-                alert("Error applying watermark. Ensure file is valid."); 
-                console.error(e);
-            }
+            } catch (e) { alert("Error applying watermark."); }
             hideLoader();
         }
 
-        // ================= SIMPLE TOOLS LOGIC (Merge, Split, etc) =================
+        // ================= SIMPLE TOOLS LOGIC =================
         async function handleMerge(event) {
             if (event.target.files.length < 2) return;
             showLoader("Merging PDFs...");
@@ -351,7 +362,7 @@
 
         async function handleImageToPdf(event) {
             const file = event.target.files[0]; if (!file) return;
-            showLoader("Converting to PDF...");
+            showLoader("Converting...");
             try {
                 const pdfDoc = await PDFDocument.create();
                 let img = file.type.includes('png') ? await pdfDoc.embedPng(await file.arrayBuffer()) : await pdfDoc.embedJpg(await file.arrayBuffer());
@@ -360,8 +371,13 @@
             } catch (e) {} hideLoader(); event.target.value = "";
         }
 
-        async function handleSimplePDFTool(event, action) {
+        async function handleProcess(event, action) {
             const file = event.target.files[0]; if (!file) return;
+            
+            let customText = "";
+            if (action === 'author') customText = prompt("Enter Author/Owner Name:", "Your Name");
+            if (action === 'author' && !customText) { event.target.value = ""; return; }
+
             showLoader("Processing...");
             try {
                 const pdfDoc = await PDFDocument.load(await file.arrayBuffer());
@@ -376,9 +392,22 @@
                     pdfDoc.getPages().forEach(p => p.setRotation(degrees(90)));
                     filename = "Rotated.pdf";
                 }
+                else if (action === 'pagenumber') {
+                    pdfDoc.getPages().forEach((p, idx) => {
+                        p.drawText(`Page ${idx + 1}`, { x: 50, y: 30, size: 12, color: rgb(0, 0, 0) });
+                    }); filename = "Page_Numbers.pdf";
+                }
+                else if (action === 'remove') {
+                    if(pdfDoc.getPageCount() > 1) pdfDoc.removePage(pdfDoc.getPageCount() - 1);
+                    filename = "Removed_Last_Page.pdf";
+                }
+                else if (action === 'author') {
+                    pdfDoc.setTitle("Edited by MyPDFTools");
+                    pdfDoc.setAuthor(customText);
+                    filename = "Updated_Metadata.pdf";
+                }
                 downloadFile(await finalPdf.save(), filename, "application/pdf");
-            } catch (e) { alert("Error processing PDF."); } 
-            hideLoader(); event.target.value = "";
+            } catch (e) { alert("Error processing PDF."); } finally { hideLoader(); event.target.value = ""; }
         }
     </script>
 </body>
