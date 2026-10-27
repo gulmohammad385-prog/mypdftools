@@ -3,64 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My PDF Tools - 100% Working</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>My PDF Tools - Premium & Colorful</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- PDF-Lib JS Library -->
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
     <style>
-        /* Global Styles */
-        body { font-family: 'Montserrat', sans-serif; background-color: #f6f5f2; margin: 0; padding: 0; color: #333; }
-        header { background-color: #ffffff; padding: 15px 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 24px; font-weight: 700; color: #e5322d; text-decoration: none; cursor: pointer; }
-        .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-links a { text-decoration: none; color: #333; font-weight: 600; cursor: pointer; transition: color 0.3s; }
-        .nav-links a:hover { color: #e5322d; }
-        .login-btn { background-color: #e5322d; color: white !important; padding: 10px 20px; border-radius: 6px; }
+        /* Global & Modern Variables */
+        :root {
+            --bg-color: #f4f7f6;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --card-bg: #ffffff;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+        }
+
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); }
         
-        .page-section { display: none; animation: fadeIn 0.5s; }
+        /* Glassmorphism Header */
+        header { 
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(12px);
+            padding: 15px 50px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04); 
+            display: flex; align-items: center; justify-content: space-between; 
+            position: sticky; top: 0; z-index: 1000; 
+        }
+        .logo { font-size: 26px; font-weight: 800; color: var(--text-main); text-decoration: none; cursor: pointer; letter-spacing: -0.5px; }
+        .logo span { color: #f43f5e; }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 600; cursor: pointer; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+        .login-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white !important; padding: 10px 24px; border-radius: 30px; box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3); transition: transform 0.3s, box-shadow 0.3s; }
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(118, 75, 162, 0.5); }
+
+        .page-section { display: none; animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         .page-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Tools Page */
-        .hero { text-align: center; padding: 60px 20px; }
-        .hero h1 { font-size: 36px; color: #1f2937; margin-bottom: 10px; }
-        .hero p { font-size: 18px; color: #4b5563; max-width: 600px; margin: 0 auto; }
-        .tools-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; padding: 0 20px 60px 20px; }
-        .tool-card { background: #ffffff; padding: 30px 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: all 0.3s ease; border: 1px solid #eaeaea; cursor: pointer; }
-        .tool-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(229, 50, 45, 0.15); border-color: #e5322d; }
-        .tool-icon { font-size: 45px; margin-bottom: 15px; }
-        .tool-card h3 { font-size: 18px; color: #111; margin-bottom: 10px; }
-        .tool-card p { font-size: 14px; color: #666; line-height: 1.5; }
-        .working-badge { display:block; margin-top:10px; font-size:12px; font-weight:bold; color:#28a745; }
+        /* Beautiful Hero Section */
+        .hero { text-align: center; padding: 80px 20px 60px; }
+        .hero h1 { 
+            font-size: 46px; font-weight: 800; margin-bottom: 15px; 
+            background: linear-gradient(135deg, #f43f5e 0%, #f97316 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero p { font-size: 18px; color: var(--text-light); max-width: 650px; margin: 0 auto; line-height: 1.6; }
 
-        /* Pricing Page */
-        .pricing-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
-        .price-card { background: #fff; padding: 40px 30px; border-radius: 15px; text-align: center; border: 1px solid #eaeaea; width: 280px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .price-card.pro { border-color: #e5322d; transform: scale(1.05); }
-        .price-card h3 { font-size: 24px; margin-bottom: 15px; }
-        .price-card h2 { font-size: 40px; color: #e5322d; margin-bottom: 20px; }
-        .price-card ul { list-style: none; padding: 0; text-align: left; margin-bottom: 30px; }
-        .price-card ul li { padding: 10px 0; border-bottom: 1px solid #eee; font-size: 14px; }
-        .buy-btn { background: #111; color: #fff; padding: 12px 0; width: 100%; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        .price-card.pro .buy-btn { background: #e5322d; }
+        /* Colorful & Modern Tool Cards */
+        .tools-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1150px; margin: 0 auto; padding: 0 20px 80px 20px; }
+        
+        .tool-card { 
+            background: var(--card-bg); padding: 35px 25px; border-radius: 24px; text-align: center; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.03); 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer; position: relative; overflow: hidden;
+        }
+        .tool-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: rgba(0,0,0,0.05); }
+        
+        /* Colored Icon Wrappers */
+        .icon-wrapper { 
+            width: 80px; height: 80px; margin: 0 auto 20px; display: flex; justify-content: center; align-items: center; 
+            border-radius: 20px; font-size: 38px; transition: transform 0.3s;
+        }
+        .tool-card:hover .icon-wrapper { transform: scale(1.1) rotate(5deg); }
+        
+        /* Individual Colors */
+        .bg-blue { background: #e0f2fe; color: #0284c7; }
+        .bg-purple { background: #f3e8ff; color: #9333ea; }
+        .bg-orange { background: #ffedd5; color: #ea580c; }
+        .bg-green { background: #dcfce7; color: #16a34a; }
+        .bg-pink { background: #fce7f3; color: #db2777; }
+        .bg-yellow { background: #fef9c3; color: #ca8a04; }
+        .bg-cyan { background: #cffafe; color: #0891b2; }
+        .bg-red { background: #fee2e2; color: #dc2626; }
+        .bg-indigo { background: #e0e7ff; color: #4f46e5; }
 
-        /* Modals (Popups) */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 3000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 30px; border-radius: 12px; width: 400px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .modal-content h2 { margin-top: 0; text-align: center; color: #111; font-size: 22px; margin-bottom: 20px; }
-        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #888; line-height: 1; }
-        .form-group { margin-bottom: 15px; text-align: left; }
-        .form-group label { display: block; font-size: 14px; font-weight: 600; color: #333; margin-bottom: 5px; }
-        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
-        .flex-row { display: flex; gap: 10px; }
-        .action-btn { background: #e5322d; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; }
+        .tool-card h3 { font-size: 20px; color: var(--text-main); margin-bottom: 12px; font-weight: 700; }
+        .tool-card p { font-size: 14px; color: var(--text-light); line-height: 1.6; margin-bottom: 15px; }
+        
+        /* Modern Pill Badges */
+        .working-badge { 
+            display: inline-block; background: #dcfce7; color: #15803d; font-size: 12px; font-weight: 700; 
+            padding: 6px 12px; border-radius: 30px; letter-spacing: 0.5px;
+        }
+        .pro-badge { background: #ffedd5; color: #c2410c; }
+
+        /* Popups / Modals */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(5px); z-index: 3000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 40px; border-radius: 24px; width: 420px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.25); animation: scaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes scaleUp { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        
+        .modal-content h2 { margin-top: 0; text-align: center; color: var(--text-main); font-size: 24px; margin-bottom: 25px; }
+        .close-btn { position: absolute; top: 15px; right: 25px; font-size: 32px; cursor: pointer; color: #94a3b8; transition: color 0.3s; }
+        .close-btn:hover { color: #f43f5e; }
+        
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; font-size: 14px; font-weight: 600; color: #475569; margin-bottom: 8px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; font-size: 14px; transition: border-color 0.3s; font-family: 'Poppins', sans-serif;}
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); }
+        .flex-row { display: flex; gap: 15px; }
+        
+        .action-btn { background: var(--primary); color: white; border: none; padding: 14px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 16px; margin-top: 10px; transition: background 0.3s; font-family: 'Poppins', sans-serif;}
+        .action-btn:hover { background: var(--primary-hover); }
 
         /* Loader */
-        #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 4000; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
-        .spinner { border: 5px solid #f3f3f3; border-top: 5px solid #e5322d; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 4000; text-align: center; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(10px); }
+        .spinner { border: 5px solid #e2e8f0; border-top: 5px solid var(--primary); border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Pricing Cards */
+        .pricing-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; max-width: 1000px; margin: 0 auto; padding: 20px 20px 80px; }
+        .price-card { background: #fff; padding: 40px 30px; border-radius: 24px; text-align: center; border: 1px solid #f1f5f9; width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+        .price-card.pro { border-color: #f43f5e; box-shadow: 0 20px 40px rgba(244, 63, 94, 0.1); transform: scale(1.05); }
+        .price-card h2 { font-size: 46px; color: var(--text-main); margin-bottom: 20px; }
+        .price-card.pro h2 { color: #f43f5e; }
+        .price-card h2 span { font-size: 16px; color: var(--text-light); }
+        .price-card ul { list-style: none; padding: 0; text-align: left; margin-bottom: 30px; }
+        .price-card ul li { padding: 12px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; color: #475569; }
+        .price-card ul li::before { content: "✨ "; }
+        .buy-btn { background: #f1f5f9; color: var(--text-main); padding: 14px 0; width: 100%; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s; font-family: 'Poppins', sans-serif;}
+        .price-card.pro .buy-btn { background: #f43f5e; color: #fff; }
+        .buy-btn:hover { filter: brightness(0.95); }
     </style>
 </head>
 <body>
@@ -68,17 +133,23 @@
     <!-- Loading Screen -->
     <div id="loader">
         <div class="spinner"></div>
-        <h2 id="loader-text" style="color: #333;">Processing...</h2>
+        <h2 id="loader-text" style="color: var(--text-main);">Processing...</h2>
     </div>
 
     <!-- Login Modal -->
     <div class="modal-overlay" id="loginModal">
-        <div class="modal-content" style="width: 320px;">
+        <div class="modal-content" style="width: 340px;">
             <span class="close-btn" onclick="closeModal('loginModal')">×</span>
-            <h2>Log in</h2>
-            <div class="form-group"><input type="email" id="loginEmail" placeholder="Email"></div>
-            <div class="form-group"><input type="password" id="loginPass" placeholder="Password"></div>
-            <button class="action-btn" onclick="simulateLogin()">Log in</button>
+            <h2>Welcome Back</h2>
+            <div class="form-group">
+                <label>Email address</label>
+                <input type="email" id="loginEmail" placeholder="name@example.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPass" placeholder="••••••••">
+            </div>
+            <button class="action-btn" onclick="simulateLogin()">Sign In</button>
         </div>
     </div>
 
@@ -86,29 +157,29 @@
     <div class="modal-overlay" id="resizeModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('resizeModal')">×</span>
-            <h2>Advanced Photo Resizer</h2>
+            <h2>Pro Photo Resizer</h2>
             <div class="form-group">
                 <label>1. Select Image</label>
                 <input type="file" id="resizeFileInput" accept="image/*">
             </div>
             <div class="form-group">
-                <label>2. Select Size Option</label>
+                <label>2. Preset Size Options</label>
                 <select id="resizePreset" onchange="updateResizeInputs()">
-                    <option value="custom">Custom Size</option>
-                    <option value="1920x1080">Full HD (1920 x 1080)</option>
-                    <option value="1280x720">HD (1280 x 720)</option>
-                    <option value="1080x1080">Instagram Square (1080 x 1080)</option>
-                    <option value="600x600">Passport / Profile (600 x 600)</option>
+                    <option value="custom">⚙️ Custom Size</option>
+                    <option value="1920x1080">📺 Full HD (1920 x 1080)</option>
+                    <option value="1280x720">💻 HD (1280 x 720)</option>
+                    <option value="1080x1080">📱 Instagram Square (1080 x 1080)</option>
+                    <option value="600x600">👤 Passport / Profile (600 x 600)</option>
                 </select>
             </div>
             <div class="flex-row">
                 <div class="form-group" style="width: 50%;">
                     <label>Width (px)</label>
-                    <input type="number" id="resizeWidth" placeholder="e.g. 800">
+                    <input type="number" id="resizeWidth" placeholder="800">
                 </div>
                 <div class="form-group" style="width: 50%;">
                     <label>Height (px)</label>
-                    <input type="number" id="resizeHeight" placeholder="e.g. 600">
+                    <input type="number" id="resizeHeight" placeholder="600">
                 </div>
             </div>
             <button class="action-btn" onclick="processAdvancedResize()">Resize & Download</button>
@@ -119,7 +190,7 @@
     <div class="modal-overlay" id="watermarkModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('watermarkModal')">×</span>
-            <h2>Advanced PDF Watermark</h2>
+            <h2>Pro PDF Watermark</h2>
             <div class="form-group">
                 <label>1. Select PDF File</label>
                 <input type="file" id="wmPdfInput" accept="application/pdf">
@@ -127,8 +198,8 @@
             <div class="form-group">
                 <label>2. Watermark Type</label>
                 <select id="wmType" onchange="toggleWmType()">
-                    <option value="text">Text Watermark</option>
-                    <option value="image">Logo / Image Watermark (PNG/JPG)</option>
+                    <option value="text">✍️ Text Watermark</option>
+                    <option value="image">🖼️ Logo / Image Watermark (PNG)</option>
                 </select>
             </div>
             
@@ -171,89 +242,123 @@
 
     <!-- Header -->
     <header>
-        <div class="logo" onclick="switchPage('home')">📄 MyPDFTools</div>
+        <div class="logo" onclick="switchPage('home')">📄 PDF<span>Tools</span></div>
         <div class="nav-links">
             <a onclick="switchPage('home')">Tools</a>
             <a onclick="switchPage('pricing')">Pricing</a>
-            <a class="login-btn" onclick="openModal('loginModal')">Log in</a>
+            <a class="login-btn" onclick="openModal('loginModal')">Sign In</a>
         </div>
     </header>
 
-    <!-- TOOLS SECTION (9 Tools) -->
+    <!-- TOOLS SECTION -->
     <div id="homeSection" class="page-section active">
         <div class="hero">
-            <h1>All the PDF & Image Tools You Need</h1>
-            <p>100% Free and Working Tools right in your browser.</p>
+            <h1>Make PDF Easy.</h1>
+            <p>All the premium tools you need to edit, merge, convert and protect your documents, directly in your browser without any uploads.</p>
         </div>
 
         <div class="tools-container">
+            <!-- Tool 1 -->
             <div class="tool-card" onclick="document.getElementById('mergeInput').click()">
-                <div class="tool-icon">🔗</div><h3>Merge PDF</h3><p>Combine multiple PDFs.</p><span class="working-badge">Working</span>
+                <div class="icon-wrapper bg-blue">🔗</div>
+                <h3>Merge PDF</h3><p>Combine multiple PDFs into one document easily.</p>
+                <span class="working-badge">Working</span>
             </div>
+            <!-- Tool 2 -->
             <div class="tool-card" onclick="document.getElementById('imgToPdfInput').click()">
-                <div class="tool-icon">🖼️</div><h3>Image to PDF</h3><p>Convert JPG/PNG to PDF.</p><span class="working-badge">Working</span>
+                <div class="icon-wrapper bg-purple">🖼️</div>
+                <h3>Image to PDF</h3><p>Convert your JPG/PNG images to a single PDF.</p>
+                <span class="working-badge">Working</span>
             </div>
-            
-            <!-- ADVANCED PHOTO RESIZER TRIGGERS POPUP -->
-            <div class="tool-card" onclick="openModal('resizeModal')">
-                <div class="tool-icon">📐</div><h3>Photo Resizer</h3><p>Resize your photos to any size.</p><span class="working-badge">Advanced Options</span>
+            <!-- Tool 3 (Advanced) -->
+            <div class="tool-card" onclick="openModal('resizeModal')" style="border: 2px solid #ea580c;">
+                <div class="icon-wrapper bg-orange">📐</div>
+                <h3>Photo Resizer</h3><p>Pro tool to resize photos with custom presets.</p>
+                <span class="working-badge pro-badge">Pro Feature</span>
             </div>
-            
+            <!-- Tool 4 -->
             <div class="tool-card" onclick="document.getElementById('splitInput').click()">
-                <div class="tool-icon">✂️</div><h3>Extract 1st Page</h3><p>Extract the first page.</p><span class="working-badge">Working</span>
+                <div class="icon-wrapper bg-green">✂️</div>
+                <h3>Extract Page</h3><p>Separate the first page from any PDF file.</p>
+                <span class="working-badge">Working</span>
             </div>
+            <!-- Tool 5 (Advanced) -->
+            <div class="tool-card" onclick="openModal('watermarkModal')" style="border: 2px solid #db2777;">
+                <div class="icon-wrapper bg-pink">©️</div>
+                <h3>Add Watermark</h3><p>Add text stamps or your own PNG logo.</p>
+                <span class="working-badge pro-badge">Pro Feature</span>
+            </div>
+            <!-- Tool 6 -->
             <div class="tool-card" onclick="document.getElementById('rotateInput').click()">
-                <div class="tool-icon">🔄</div><h3>Rotate PDF</h3><p>Rotate pages by 90 deg.</p><span class="working-badge">Working</span>
+                <div class="icon-wrapper bg-yellow">🔄</div>
+                <h3>Rotate PDF</h3><p>Rotate all pages of your document instantly.</p>
+                <span class="working-badge">Working</span>
             </div>
-            
-            <!-- ADVANCED WATERMARK TRIGGERS POPUP -->
-            <div class="tool-card" onclick="openModal('watermarkModal')">
-                <div class="tool-icon">©️</div><h3>Add Watermark</h3><p>Add custom text or Logo (PNG).</p><span class="working-badge">Advanced Options</span>
-            </div>
-
+            <!-- Tool 7 -->
             <div class="tool-card" onclick="document.getElementById('pageNumberInput').click()">
-                <div class="tool-icon">🔢</div><h3>Add Page Numbers</h3><p>Add numbers to all pages.</p><span class="working-badge">Working</span>
+                <div class="icon-wrapper bg-cyan">🔢</div>
+                <h3>Page Numbers</h3><p>Insert page numbers to your document automatically.</p>
+                <span class="working-badge">Working</span>
             </div>
+            <!-- Tool 8 -->
             <div class="tool-card" onclick="document.getElementById('removePageInput').click()">
-                <div class="tool-icon">🗑️</div><h3>Remove Last Page</h3><p>Delete the final page.</p><span class="working-badge">Working</span>
+                <div class="icon-wrapper bg-red">🗑️</div>
+                <h3>Remove Page</h3><p>Delete the final page of your document quickly.</p>
+                <span class="working-badge">Working</span>
             </div>
+            <!-- Tool 9 -->
             <div class="tool-card" onclick="document.getElementById('authorInput').click()">
-                <div class="tool-icon">👤</div><h3>Change Author</h3><p>Set yourself as PDF owner.</p><span class="working-badge">Working</span>
+                <div class="icon-wrapper bg-indigo">👤</div>
+                <h3>Change Author</h3><p>Update PDF metadata to make it your own.</p>
+                <span class="working-badge">Working</span>
             </div>
         </div>
     </div>
 
     <!-- PRICING SECTION -->
     <div id="pricingSection" class="page-section">
-        <div class="hero"><h1>Transparent Pricing</h1></div>
+        <div class="hero">
+            <h1>Simple, Transparent Pricing</h1>
+            <p>Upgrade to Pro for unlimited document processing.</p>
+        </div>
         <div class="pricing-container">
             <div class="price-card">
-                <h3>Basic</h3><h2>$0 <span>/mo</span></h2>
-                <ul><li>Merge, Split, Watermark</li><li>Basic Photo Tools</li></ul>
+                <h3 style="margin-top:0; color:#64748b;">Basic</h3>
+                <h2>$0 <span>/mo</span></h2>
+                <ul>
+                    <li>Merge & Split PDFs</li>
+                    <li>Image to PDF</li>
+                    <li>Standard Photo Tools</li>
+                </ul>
                 <button class="buy-btn" onclick="openModal('loginModal')">Get Started</button>
             </div>
             <div class="price-card pro">
-                <h3>Premium</h3><h2>$9 <span>/mo</span></h2>
-                <ul><li>All 9 Working Features</li><li>Unlimited Processing</li></ul>
-                <button class="buy-btn" onclick="openModal('loginModal')">Go Premium</button>
+                <h3 style="margin-top:0; color:#f43f5e;">Premium</h3>
+                <h2>$9 <span>/mo</span></h2>
+                <ul>
+                    <li><strong>Pro Photo Resizer (All Presets)</strong></li>
+                    <li><strong>Custom Logo Watermarks</strong></li>
+                    <li>Priority Processing & No Ads</li>
+                </ul>
+                <button class="buy-btn" onclick="openModal('loginModal')">Upgrade to Pro</button>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- JAVASCRIPT LOGIC (Unchanged, 100% Working) -->
     <script>
         const { PDFDocument, rgb, degrees } = PDFLib;
 
-        // UI & Modals Logic
         function switchPage(page) {
             document.getElementById('homeSection').classList.remove('active');
             document.getElementById('pricingSection').classList.remove('active');
             if(page === 'home') document.getElementById('homeSection').classList.add('active');
             if(page === 'pricing') document.getElementById('pricingSection').classList.add('active');
+            window.scrollTo(0,0);
         }
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function simulateLogin() { alert("Demo Mode: Login disabled."); closeModal('loginModal'); }
+        function simulateLogin() { alert("Demo Mode: Backend Database is disconnected."); closeModal('loginModal'); }
         function showLoader(text) { document.getElementById('loader-text').innerText = text; document.getElementById('loader').style.display = 'flex'; }
         function hideLoader() { document.getElementById('loader').style.display = 'none'; }
         function downloadFile(bytes, filename, type) {
@@ -262,7 +367,7 @@
             const a = document.createElement("a"); a.href = url; a.download = filename; a.click();
         }
 
-        // ================= ADVANCED RESIZER =================
+        /* ----- PRO PHOTO RESIZER ----- */
         function updateResizeInputs() {
             const preset = document.getElementById('resizePreset').value;
             const wInput = document.getElementById('resizeWidth');
@@ -293,7 +398,7 @@
             }; reader.readAsDataURL(fileInput.files[0]);
         }
 
-        // ================= ADVANCED WATERMARK =================
+        /* ----- PRO WATERMARK ----- */
         function toggleWmType() {
             const type = document.getElementById('wmType').value;
             if(type === 'text') {
@@ -345,7 +450,7 @@
             hideLoader();
         }
 
-        // ================= SIMPLE TOOLS LOGIC =================
+        /* ----- DIRECT TOOLS ----- */
         async function handleMerge(event) {
             if (event.target.files.length < 2) return;
             showLoader("Merging PDFs...");
@@ -402,7 +507,7 @@
                     filename = "Removed_Last_Page.pdf";
                 }
                 else if (action === 'author') {
-                    pdfDoc.setTitle("Edited by MyPDFTools");
+                    pdfDoc.setTitle("Edited by PDFTools");
                     pdfDoc.setAuthor(customText);
                     filename = "Updated_Metadata.pdf";
                 }
