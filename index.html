@@ -3,235 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My PDF Tools - Premium & Colorful</title>
+    <title>PDFTools - The Ultimate Document Workspace</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- PDF-Lib JS Library -->
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
     <style>
-        /* Global & Modern Variables */
         :root {
-            --bg-color: #f4f7f6;
-            --text-main: #1e293b;
+            --bg-color: #f8fafc;
+            --text-main: #0f172a;
             --text-light: #64748b;
             --card-bg: #ffffff;
             --primary: #4f46e5;
             --primary-hover: #4338ca;
         }
 
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); overflow-x: hidden; }
         
-        /* Glassmorphism Header */
+        /* Header */
         header { 
-            background: rgba(255, 255, 255, 0.85); 
-            backdrop-filter: blur(12px);
-            padding: 15px 50px; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04); 
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px);
+            padding: 15px 5%; box-shadow: 0 1px 10px rgba(0,0,0,0.05); 
             display: flex; align-items: center; justify-content: space-between; 
-            position: sticky; top: 0; z-index: 1000; 
+            position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #e2e8f0;
         }
-        .logo { font-size: 26px; font-weight: 800; color: var(--text-main); text-decoration: none; cursor: pointer; letter-spacing: -0.5px; }
+        .logo { font-size: 24px; font-weight: 800; color: var(--text-main); text-decoration: none; cursor: pointer; letter-spacing: -0.5px; }
         .logo span { color: #f43f5e; }
         .nav-links { display: flex; gap: 30px; align-items: center; }
-        .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 600; cursor: pointer; transition: color 0.3s; }
+        .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 15px; transition: color 0.3s; }
         .nav-links a:hover { color: var(--primary); }
-        .login-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white !important; padding: 10px 24px; border-radius: 30px; box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3); transition: transform 0.3s, box-shadow 0.3s; }
-        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(118, 75, 162, 0.5); }
+        .login-btn { background: #0f172a; color: white !important; padding: 10px 24px; border-radius: 8px; transition: background 0.3s; }
+        .login-btn:hover { background: #334155; }
 
-        .page-section { display: none; animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .page-section { display: none; animation: fadeIn 0.5s ease-out; }
         .page-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Beautiful Hero Section */
-        .hero { text-align: center; padding: 80px 20px 60px; }
-        .hero h1 { 
-            font-size: 46px; font-weight: 800; margin-bottom: 15px; 
-            background: linear-gradient(135deg, #f43f5e 0%, #f97316 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .hero p { font-size: 18px; color: var(--text-light); max-width: 650px; margin: 0 auto; line-height: 1.6; }
+        /* Hero Section */
+        .hero { text-align: center; padding: 100px 20px 60px; background: linear-gradient(180deg, #f1f5f9 0%, #f8fafc 100%); }
+        .hero h1 { font-size: 52px; font-weight: 800; margin-bottom: 20px; line-height: 1.2; letter-spacing: -1px; }
+        .hero h1 span { background: linear-gradient(135deg, #4f46e5 0%, #f43f5e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 18px; color: var(--text-light); max-width: 700px; margin: 0 auto 30px; line-height: 1.6; }
+        .hero-btns button { background: var(--primary); color: white; border: none; padding: 14px 32px; font-size: 16px; font-weight: 600; border-radius: 30px; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3); font-family: 'Poppins', sans-serif;}
+        .hero-btns button:hover { background: var(--primary-hover); transform: translateY(-3px); }
 
-        /* Colorful & Modern Tool Cards */
-        .tools-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1150px; margin: 0 auto; padding: 0 20px 80px 20px; }
+        /* Trust Banner */
+        .trust-banner { display: flex; justify-content: center; gap: 40px; padding: 30px 20px; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; background: white; flex-wrap: wrap; }
+        .trust-item { display: flex; align-items: center; gap: 10px; font-weight: 600; color: #475569; font-size: 15px; }
+        .trust-item span { color: #10b981; font-size: 20px; }
+
+        /* Tools Grid */
+        .tools-section { padding: 80px 5%; max-width: 1200px; margin: 0 auto; }
+        .section-title { text-align: center; font-size: 32px; font-weight: 700; margin-bottom: 50px; color: var(--text-main); }
+        .tools-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
         
         .tool-card { 
-            background: var(--card-bg); padding: 35px 25px; border-radius: 24px; text-align: center; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.03); 
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer; position: relative; overflow: hidden;
+            background: var(--card-bg); padding: 35px 25px; border-radius: 20px; text-align: left; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid #e2e8f0; 
+            transition: all 0.3s ease; cursor: pointer; position: relative; display: flex; gap: 20px; align-items: flex-start;
         }
-        .tool-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: rgba(0,0,0,0.05); }
+        .tool-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05), 0 10px 10px -5px rgba(0,0,0,0.02); border-color: #cbd5e1; }
         
-        /* Colored Icon Wrappers */
-        .icon-wrapper { 
-            width: 80px; height: 80px; margin: 0 auto 20px; display: flex; justify-content: center; align-items: center; 
-            border-radius: 20px; font-size: 38px; transition: transform 0.3s;
-        }
-        .tool-card:hover .icon-wrapper { transform: scale(1.1) rotate(5deg); }
-        
-        /* Individual Colors */
-        .bg-blue { background: #e0f2fe; color: #0284c7; }
-        .bg-purple { background: #f3e8ff; color: #9333ea; }
-        .bg-orange { background: #ffedd5; color: #ea580c; }
-        .bg-green { background: #dcfce7; color: #16a34a; }
-        .bg-pink { background: #fce7f3; color: #db2777; }
-        .bg-yellow { background: #fef9c3; color: #ca8a04; }
-        .bg-cyan { background: #cffafe; color: #0891b2; }
-        .bg-red { background: #fee2e2; color: #dc2626; }
+        .icon-wrapper { min-width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; border-radius: 15px; font-size: 28px; }
+        .bg-blue { background: #e0f2fe; color: #0284c7; } .bg-purple { background: #f3e8ff; color: #9333ea; }
+        .bg-orange { background: #ffedd5; color: #ea580c; } .bg-green { background: #dcfce7; color: #16a34a; }
+        .bg-pink { background: #fce7f3; color: #db2777; } .bg-yellow { background: #fef9c3; color: #ca8a04; }
+        .bg-cyan { background: #cffafe; color: #0891b2; } .bg-red { background: #fee2e2; color: #dc2626; }
         .bg-indigo { background: #e0e7ff; color: #4f46e5; }
 
-        .tool-card h3 { font-size: 20px; color: var(--text-main); margin-bottom: 12px; font-weight: 700; }
-        .tool-card p { font-size: 14px; color: var(--text-light); line-height: 1.6; margin-bottom: 15px; }
-        
-        /* Modern Pill Badges */
-        .working-badge { 
-            display: inline-block; background: #dcfce7; color: #15803d; font-size: 12px; font-weight: 700; 
-            padding: 6px 12px; border-radius: 30px; letter-spacing: 0.5px;
-        }
-        .pro-badge { background: #ffedd5; color: #c2410c; }
+        .tool-info h3 { font-size: 18px; margin: 0 0 8px 0; color: var(--text-main); font-weight: 700; }
+        .tool-info p { font-size: 13px; color: var(--text-light); line-height: 1.5; margin: 0 0 10px 0; }
+        .badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+        .badge.free { background: #f1f5f9; color: #475569; }
+        .badge.pro { background: #ffedd5; color: #c2410c; }
 
-        /* Popups / Modals */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(5px); z-index: 3000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 40px; border-radius: 24px; width: 420px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.25); animation: scaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes scaleUp { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-        
-        .modal-content h2 { margin-top: 0; text-align: center; color: var(--text-main); font-size: 24px; margin-bottom: 25px; }
-        .close-btn { position: absolute; top: 15px; right: 25px; font-size: 32px; cursor: pointer; color: #94a3b8; transition: color 0.3s; }
-        .close-btn:hover { color: #f43f5e; }
-        
-        .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { display: block; font-size: 14px; font-weight: 600; color: #475569; margin-bottom: 8px; }
-        .form-group input, .form-group select { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; font-size: 14px; transition: border-color 0.3s; font-family: 'Poppins', sans-serif;}
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); }
-        .flex-row { display: flex; gap: 15px; }
-        
-        .action-btn { background: var(--primary); color: white; border: none; padding: 14px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 16px; margin-top: 10px; transition: background 0.3s; font-family: 'Poppins', sans-serif;}
+        /* Features Section */
+        .features-section { background: #0f172a; color: white; padding: 80px 5%; text-align: center; }
+        .features-section .section-title { color: white; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; max-width: 1100px; margin: 0 auto; }
+        .feature-box h4 { font-size: 20px; margin-bottom: 10px; }
+        .feature-box p { color: #94a3b8; font-size: 14px; line-height: 1.6; }
+        .feature-box span { font-size: 40px; display: block; margin-bottom: 15px; }
+
+        /* Footer */
+        footer { background: #ffffff; border-top: 1px solid #e2e8f0; padding: 60px 5% 30px; color: #475569; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-col h4 { color: #0f172a; font-size: 16px; margin-bottom: 20px; }
+        .footer-col a { display: block; color: #64748b; text-decoration: none; margin-bottom: 12px; font-size: 14px; transition: 0.3s; }
+        .footer-col a:hover { color: var(--primary); }
+        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 13px; }
+
+        /* Modals & Loader (Existing Logic) */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px); z-index: 3000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 35px; border-radius: 20px; width: 400px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
+        .modal-content h2 { margin-top: 0; font-size: 22px; margin-bottom: 20px; color: var(--text-main); }
+        .close-btn { position: absolute; top: 20px; right: 25px; font-size: 28px; cursor: pointer; color: #94a3b8; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 6px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; font-family: 'Poppins', sans-serif;}
+        .flex-row { display: flex; gap: 10px; }
+        .action-btn { background: var(--primary); color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; margin-top: 10px; font-family: 'Poppins', sans-serif; transition: 0.3s;}
         .action-btn:hover { background: var(--primary-hover); }
-
-        /* Loader */
-        #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 4000; text-align: center; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(10px); }
-        .spinner { border: 5px solid #e2e8f0; border-top: 5px solid var(--primary); border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 4000; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
+        .spinner { border: 4px solid #e2e8f0; border-top: 4px solid var(--primary); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        /* Pricing Cards */
+
+        /* Pricing Section */
         .pricing-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; max-width: 1000px; margin: 0 auto; padding: 20px 20px 80px; }
-        .price-card { background: #fff; padding: 40px 30px; border-radius: 24px; text-align: center; border: 1px solid #f1f5f9; width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
-        .price-card.pro { border-color: #f43f5e; box-shadow: 0 20px 40px rgba(244, 63, 94, 0.1); transform: scale(1.05); }
-        .price-card h2 { font-size: 46px; color: var(--text-main); margin-bottom: 20px; }
+        .price-card { background: #fff; padding: 40px 30px; border-radius: 20px; text-align: center; border: 1px solid #e2e8f0; width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
+        .price-card.pro { border-color: #f43f5e; box-shadow: 0 20px 40px rgba(244, 63, 94, 0.08); transform: scale(1.05); }
+        .price-card h2 { font-size: 42px; color: var(--text-main); margin-bottom: 20px; }
         .price-card.pro h2 { color: #f43f5e; }
-        .price-card h2 span { font-size: 16px; color: var(--text-light); }
         .price-card ul { list-style: none; padding: 0; text-align: left; margin-bottom: 30px; }
         .price-card ul li { padding: 12px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; color: #475569; }
-        .price-card ul li::before { content: "✨ "; }
-        .buy-btn { background: #f1f5f9; color: var(--text-main); padding: 14px 0; width: 100%; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s; font-family: 'Poppins', sans-serif;}
+        .price-card ul li::before { content: "✓ "; font-weight: bold; color: #10b981;}
+        .buy-btn { background: #f1f5f9; color: var(--text-main); padding: 12px 0; width: 100%; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif;}
         .price-card.pro .buy-btn { background: #f43f5e; color: #fff; }
-        .buy-btn:hover { filter: brightness(0.95); }
     </style>
 </head>
 <body>
 
-    <!-- Loading Screen -->
-    <div id="loader">
-        <div class="spinner"></div>
-        <h2 id="loader-text" style="color: var(--text-main);">Processing...</h2>
-    </div>
+    <div id="loader"><div class="spinner"></div><h2 id="loader-text" style="color: var(--text-main);">Processing...</h2></div>
 
     <!-- Login Modal -->
     <div class="modal-overlay" id="loginModal">
-        <div class="modal-content" style="width: 340px;">
+        <div class="modal-content" style="width: 320px;">
             <span class="close-btn" onclick="closeModal('loginModal')">×</span>
-            <h2>Welcome Back</h2>
-            <div class="form-group">
-                <label>Email address</label>
-                <input type="email" id="loginEmail" placeholder="name@example.com">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="loginPass" placeholder="••••••••">
-            </div>
-            <button class="action-btn" onclick="simulateLogin()">Sign In</button>
+            <h2>Sign In</h2>
+            <div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="name@company.com"></div>
+            <div class="form-group"><label>Password</label><input type="password" id="loginPass" placeholder="••••••••"></div>
+            <button class="action-btn" onclick="simulateLogin()">Continue</button>
         </div>
     </div>
 
-    <!-- ADVANCED RESIZE MODAL -->
+    <!-- Advanced Resize Modal -->
     <div class="modal-overlay" id="resizeModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('resizeModal')">×</span>
             <h2>Pro Photo Resizer</h2>
-            <div class="form-group">
-                <label>1. Select Image</label>
-                <input type="file" id="resizeFileInput" accept="image/*">
-            </div>
-            <div class="form-group">
-                <label>2. Preset Size Options</label>
+            <div class="form-group"><label>1. Select Image</label><input type="file" id="resizeFileInput" accept="image/*"></div>
+            <div class="form-group"><label>2. Preset Size Options</label>
                 <select id="resizePreset" onchange="updateResizeInputs()">
                     <option value="custom">⚙️ Custom Size</option>
                     <option value="1920x1080">📺 Full HD (1920 x 1080)</option>
-                    <option value="1280x720">💻 HD (1280 x 720)</option>
                     <option value="1080x1080">📱 Instagram Square (1080 x 1080)</option>
-                    <option value="600x600">👤 Passport / Profile (600 x 600)</option>
+                    <option value="600x600">👤 Passport Size (600 x 600)</option>
                 </select>
             </div>
             <div class="flex-row">
-                <div class="form-group" style="width: 50%;">
-                    <label>Width (px)</label>
-                    <input type="number" id="resizeWidth" placeholder="800">
-                </div>
-                <div class="form-group" style="width: 50%;">
-                    <label>Height (px)</label>
-                    <input type="number" id="resizeHeight" placeholder="600">
-                </div>
+                <div class="form-group" style="width: 50%;"><label>Width (px)</label><input type="number" id="resizeWidth" placeholder="800"></div>
+                <div class="form-group" style="width: 50%;"><label>Height (px)</label><input type="number" id="resizeHeight" placeholder="600"></div>
             </div>
             <button class="action-btn" onclick="processAdvancedResize()">Resize & Download</button>
         </div>
     </div>
 
-    <!-- ADVANCED WATERMARK MODAL -->
+    <!-- Advanced Watermark Modal -->
     <div class="modal-overlay" id="watermarkModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('watermarkModal')">×</span>
             <h2>Pro PDF Watermark</h2>
-            <div class="form-group">
-                <label>1. Select PDF File</label>
-                <input type="file" id="wmPdfInput" accept="application/pdf">
-            </div>
-            <div class="form-group">
-                <label>2. Watermark Type</label>
+            <div class="form-group"><label>1. Select PDF File</label><input type="file" id="wmPdfInput" accept="application/pdf"></div>
+            <div class="form-group"><label>2. Watermark Type</label>
                 <select id="wmType" onchange="toggleWmType()">
                     <option value="text">✍️ Text Watermark</option>
-                    <option value="image">🖼️ Logo / Image Watermark (PNG)</option>
+                    <option value="image">🖼️ Logo (PNG/JPG)</option>
                 </select>
             </div>
-            
-            <div class="form-group" id="wmTextGroup">
-                <label>Enter Text</label>
-                <input type="text" id="wmTextValue" placeholder="e.g. CONFIDENTIAL" value="CONFIDENTIAL">
-            </div>
-            
-            <div class="form-group" id="wmImageGroup" style="display: none;">
-                <label>Upload Logo (PNG/JPG)</label>
-                <input type="file" id="wmImageInput" accept="image/png, image/jpeg">
-            </div>
-
+            <div class="form-group" id="wmTextGroup"><label>Enter Text</label><input type="text" id="wmTextValue" value="CONFIDENTIAL"></div>
+            <div class="form-group" id="wmImageGroup" style="display: none;"><label>Upload Logo</label><input type="file" id="wmImageInput" accept="image/png, image/jpeg"></div>
             <div class="flex-row">
-                <div class="form-group" style="width: 50%;">
-                    <label>Position</label>
-                    <select id="wmPosition">
-                        <option value="center">Center</option>
-                        <option value="bottom-right">Bottom Right</option>
-                        <option value="top-left">Top Left</option>
-                    </select>
+                <div class="form-group" style="width: 50%;"><label>Position</label>
+                    <select id="wmPosition"><option value="center">Center</option><option value="bottom-right">Bottom Right</option><option value="top-left">Top Left</option></select>
                 </div>
-                <div class="form-group" style="width: 50%;">
-                    <label>Opacity (0.1 to 1)</label>
-                    <input type="number" id="wmOpacity" step="0.1" min="0.1" max="1" value="0.4">
-                </div>
+                <div class="form-group" style="width: 50%;"><label>Opacity (0.1 to 1)</label><input type="number" id="wmOpacity" step="0.1" min="0.1" max="1" value="0.4"></div>
             </div>
             <button class="action-btn" onclick="processAdvancedWatermark()">Apply Watermark</button>
         </div>
     </div>
 
-    <!-- Hidden Inputs For Other 7 Direct Tools -->
+    <!-- Hidden Inputs For Direct Tools -->
     <input type="file" id="mergeInput" multiple accept="application/pdf" style="display: none;" onchange="handleMerge(event)">
     <input type="file" id="imgToPdfInput" accept="image/png, image/jpeg" style="display: none;" onchange="handleImageToPdf(event)">
     <input type="file" id="splitInput" accept="application/pdf" style="display: none;" onchange="handleProcess(event, 'split')">
@@ -242,110 +192,159 @@
 
     <!-- Header -->
     <header>
-        <div class="logo" onclick="switchPage('home')">📄 PDF<span>Tools</span></div>
+        <div class="logo" onclick="switchPage('home')">PDF<span>Tools.</span></div>
         <div class="nav-links">
-            <a onclick="switchPage('home')">Tools</a>
+            <a onclick="switchPage('home')">Product</a>
             <a onclick="switchPage('pricing')">Pricing</a>
+            <a onclick="document.getElementById('featuresSection').scrollIntoView({behavior: 'smooth'})">Why Us</a>
             <a class="login-btn" onclick="openModal('loginModal')">Sign In</a>
         </div>
     </header>
 
-    <!-- TOOLS SECTION -->
+    <!-- MAIN HOME SECTION -->
     <div id="homeSection" class="page-section active">
+        
+        <!-- Hero Section -->
         <div class="hero">
-            <h1>Make PDF Easy.</h1>
-            <p>All the premium tools you need to edit, merge, convert and protect your documents, directly in your browser without any uploads.</p>
+            <h1>Every tool you need to <br><span>work with PDFs.</span></h1>
+            <p>Merge, edit, convert, and protect your documents with our 100% secure, client-side processing tools. No server uploads required.</p>
+            <div class="hero-btns">
+                <button onclick="document.getElementById('toolsSection').scrollIntoView({behavior: 'smooth'})">Explore All Tools</button>
+            </div>
         </div>
 
-        <div class="tools-container">
-            <!-- Tool 1 -->
-            <div class="tool-card" onclick="document.getElementById('mergeInput').click()">
-                <div class="icon-wrapper bg-blue">🔗</div>
-                <h3>Merge PDF</h3><p>Combine multiple PDFs into one document easily.</p>
-                <span class="working-badge">Working</span>
+        <!-- Trust Banner -->
+        <div class="trust-banner">
+            <div class="trust-item"><span>🔒</span> 100% Secure Processing</div>
+            <div class="trust-item"><span>⚡</span> Lightning Fast (Client-side)</div>
+            <div class="trust-item"><span>🛡️</span> Zero Server Uploads</div>
+            <div class="trust-item"><span>💻</span> Works on Any Browser</div>
+        </div>
+
+        <!-- Tools Grid Section -->
+        <div class="tools-section" id="toolsSection">
+            <h2 class="section-title">Our Premium Tools</h2>
+            <div class="tools-container">
+                <div class="tool-card" onclick="document.getElementById('mergeInput').click()">
+                    <div class="icon-wrapper bg-blue">🔗</div>
+                    <div class="tool-info">
+                        <h3>Merge PDF</h3><p>Combine multiple PDFs into one unified document seamlessly.</p><span class="badge free">Free</span>
+                    </div>
+                </div>
+                <div class="tool-card" onclick="document.getElementById('imgToPdfInput').click()">
+                    <div class="icon-wrapper bg-purple">🖼️</div>
+                    <div class="tool-info">
+                        <h3>Image to PDF</h3><p>Convert your JPG and PNG images into a PDF format.</p><span class="badge free">Free</span>
+                    </div>
+                </div>
+                <div class="tool-card" onclick="openModal('resizeModal')" style="border-left: 4px solid #ea580c;">
+                    <div class="icon-wrapper bg-orange">📐</div>
+                    <div class="tool-info">
+                        <h3>Photo Resizer</h3><p>Advanced tool to resize photos with custom pixel settings.</p><span class="badge pro">Pro Feature</span>
+                    </div>
+                </div>
+                <div class="tool-card" onclick="document.getElementById('splitInput').click()">
+                    <div class="icon-wrapper bg-green">✂️</div>
+                    <div class="tool-info">
+                        <h3>Extract Page</h3><p>Quickly separate the first page from any PDF file.</p><span class="badge free">Free</span>
+                    </div>
+                </div>
+                <div class="tool-card" onclick="openModal('watermarkModal')" style="border-left: 4px solid #db2777;">
+                    <div class="icon-wrapper bg-pink">©️</div>
+                    <div class="tool-info">
+                        <h3>Add Watermark</h3><p>Stamp custom text or upload your own PNG brand logo.</p><span class="badge pro">Pro Feature</span>
+                    </div>
+                </div>
+                <div class="tool-card" onclick="document.getElementById('rotateInput').click()">
+                    <div class="icon-wrapper bg-yellow">🔄</div>
+                    <div class="tool-info">
+                        <h3>Rotate PDF</h3><p>Rotate all pages of your document by 90 degrees.</p><span class="badge free">Free</span>
+                    </div>
+                </div>
+                <div class="tool-card" onclick="document.getElementById('pageNumberInput').click()">
+                    <div class="icon-wrapper bg-cyan">🔢</div>
+                    <div class="tool-info">
+                        <h3>Page Numbers</h3><p>Automatically insert page numbers to your document.</p><span class="badge free">Free</span>
+                    </div>
+                </div>
+                <div class="tool-card" onclick="document.getElementById('removePageInput').click()">
+                    <div class="icon-wrapper bg-red">🗑️</div>
+                    <div class="tool-info">
+                        <h3>Remove Page</h3><p>Instantly delete the final page of your PDF document.</p><span class="badge free">Free</span>
+                    </div>
+                </div>
+                <div class="tool-card" onclick="document.getElementById('authorInput').click()">
+                    <div class="icon-wrapper bg-indigo">👤</div>
+                    <div class="tool-info">
+                        <h3>Change Author</h3><p>Update PDF metadata properties to claim ownership.</p><span class="badge free">Free</span>
+                    </div>
+                </div>
             </div>
-            <!-- Tool 2 -->
-            <div class="tool-card" onclick="document.getElementById('imgToPdfInput').click()">
-                <div class="icon-wrapper bg-purple">🖼️</div>
-                <h3>Image to PDF</h3><p>Convert your JPG/PNG images to a single PDF.</p>
-                <span class="working-badge">Working</span>
-            </div>
-            <!-- Tool 3 (Advanced) -->
-            <div class="tool-card" onclick="openModal('resizeModal')" style="border: 2px solid #ea580c;">
-                <div class="icon-wrapper bg-orange">📐</div>
-                <h3>Photo Resizer</h3><p>Pro tool to resize photos with custom presets.</p>
-                <span class="working-badge pro-badge">Pro Feature</span>
-            </div>
-            <!-- Tool 4 -->
-            <div class="tool-card" onclick="document.getElementById('splitInput').click()">
-                <div class="icon-wrapper bg-green">✂️</div>
-                <h3>Extract Page</h3><p>Separate the first page from any PDF file.</p>
-                <span class="working-badge">Working</span>
-            </div>
-            <!-- Tool 5 (Advanced) -->
-            <div class="tool-card" onclick="openModal('watermarkModal')" style="border: 2px solid #db2777;">
-                <div class="icon-wrapper bg-pink">©️</div>
-                <h3>Add Watermark</h3><p>Add text stamps or your own PNG logo.</p>
-                <span class="working-badge pro-badge">Pro Feature</span>
-            </div>
-            <!-- Tool 6 -->
-            <div class="tool-card" onclick="document.getElementById('rotateInput').click()">
-                <div class="icon-wrapper bg-yellow">🔄</div>
-                <h3>Rotate PDF</h3><p>Rotate all pages of your document instantly.</p>
-                <span class="working-badge">Working</span>
-            </div>
-            <!-- Tool 7 -->
-            <div class="tool-card" onclick="document.getElementById('pageNumberInput').click()">
-                <div class="icon-wrapper bg-cyan">🔢</div>
-                <h3>Page Numbers</h3><p>Insert page numbers to your document automatically.</p>
-                <span class="working-badge">Working</span>
-            </div>
-            <!-- Tool 8 -->
-            <div class="tool-card" onclick="document.getElementById('removePageInput').click()">
-                <div class="icon-wrapper bg-red">🗑️</div>
-                <h3>Remove Page</h3><p>Delete the final page of your document quickly.</p>
-                <span class="working-badge">Working</span>
-            </div>
-            <!-- Tool 9 -->
-            <div class="tool-card" onclick="document.getElementById('authorInput').click()">
-                <div class="icon-wrapper bg-indigo">👤</div>
-                <h3>Change Author</h3><p>Update PDF metadata to make it your own.</p>
-                <span class="working-badge">Working</span>
+        </div>
+
+        <!-- Features / Why Choose Us -->
+        <div class="features-section" id="featuresSection">
+            <h2 class="section-title">Why Professionals Choose PDFTools</h2>
+            <div class="features-grid">
+                <div class="feature-box"><span>🛡️</span><h4>Maximum Privacy</h4><p>We do not use backend servers for these tools. Your files are processed using JavaScript directly in your browser. Your data never leaves your computer.</p></div>
+                <div class="feature-box"><span>⚡</span><h4>Instant Results</h4><p>Because there is no uploading or downloading from a server, files are processed instantly. Say goodbye to waiting for heavy documents to process.</p></div>
+                <div class="feature-box"><span>💎</span><h4>Enterprise Quality</h4><p>Built with industry-leading PDF-Lib technology, ensuring the final output retains its original quality without compromising on formatting.</p></div>
             </div>
         </div>
     </div>
 
     <!-- PRICING SECTION -->
     <div id="pricingSection" class="page-section">
-        <div class="hero">
-            <h1>Simple, Transparent Pricing</h1>
-            <p>Upgrade to Pro for unlimited document processing.</p>
+        <div class="hero" style="padding-bottom: 40px;">
+            <h1>Plans for everyone.</h1>
+            <p>Upgrade your workflow with our premium features.</p>
         </div>
         <div class="pricing-container">
             <div class="price-card">
-                <h3 style="margin-top:0; color:#64748b;">Basic</h3>
-                <h2>$0 <span>/mo</span></h2>
-                <ul>
-                    <li>Merge & Split PDFs</li>
-                    <li>Image to PDF</li>
-                    <li>Standard Photo Tools</li>
-                </ul>
-                <button class="buy-btn" onclick="openModal('loginModal')">Get Started</button>
+                <h3 style="margin-top:0; color:var(--text-light);">Basic</h3><h2>$0 <span>/mo</span></h2>
+                <ul><li>Access to 7 Free Tools</li><li>Unlimited Standard Processing</li><li>Community Support</li></ul>
+                <button class="buy-btn" onclick="openModal('loginModal')">Current Plan</button>
             </div>
             <div class="price-card pro">
-                <h3 style="margin-top:0; color:#f43f5e;">Premium</h3>
-                <h2>$9 <span>/mo</span></h2>
-                <ul>
-                    <li><strong>Pro Photo Resizer (All Presets)</strong></li>
-                    <li><strong>Custom Logo Watermarks</strong></li>
-                    <li>Priority Processing & No Ads</li>
-                </ul>
+                <h3 style="margin-top:0; color:#f43f5e;">Pro Workspace</h3><h2>$9 <span>/mo</span></h2>
+                <ul><li><strong>Pro Photo Resizer (All Presets)</strong></li><li><strong>Custom Logo Watermarks</strong></li><li>Priority Email Support</li></ul>
                 <button class="buy-btn" onclick="openModal('loginModal')">Upgrade to Pro</button>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC (Unchanged, 100% Working) -->
+    <!-- Professional Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <div class="logo" style="font-size: 20px; margin-bottom: 15px;">PDF<span>Tools.</span></div>
+                <p style="font-size: 13px; line-height: 1.6; margin-top: 0;">Providing secure, client-side document processing solutions for professionals worldwide.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Product</h4>
+                <a href="#" onclick="switchPage('home')">All PDF Tools</a>
+                <a href="#" onclick="switchPage('pricing')">Pricing Plans</a>
+                <a href="#" onclick="openModal('resizeModal')">Pro Resizer</a>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="#">About Us</a>
+                <a href="#">Contact Support</a>
+                <a href="#">Careers</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Security Overview</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 PDFTools Inc. All rights reserved. Designed for secure document workflows.
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC (100% Intact) -->
     <script>
         const { PDFDocument, rgb, degrees } = PDFLib;
 
@@ -358,7 +357,7 @@
         }
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function simulateLogin() { alert("Demo Mode: Backend Database is disconnected."); closeModal('loginModal'); }
+        function simulateLogin() { alert("System Alert: Backend Database is disconnected in Static Mode."); closeModal('loginModal'); }
         function showLoader(text) { document.getElementById('loader-text').innerText = text; document.getElementById('loader').style.display = 'flex'; }
         function hideLoader() { document.getElementById('loader').style.display = 'none'; }
         function downloadFile(bytes, filename, type) {
@@ -401,13 +400,8 @@
         /* ----- PRO WATERMARK ----- */
         function toggleWmType() {
             const type = document.getElementById('wmType').value;
-            if(type === 'text') {
-                document.getElementById('wmTextGroup').style.display = 'block';
-                document.getElementById('wmImageGroup').style.display = 'none';
-            } else {
-                document.getElementById('wmTextGroup').style.display = 'none';
-                document.getElementById('wmImageGroup').style.display = 'block';
-            }
+            if(type === 'text') { document.getElementById('wmTextGroup').style.display = 'block'; document.getElementById('wmImageGroup').style.display = 'none'; } 
+            else { document.getElementById('wmTextGroup').style.display = 'none'; document.getElementById('wmImageGroup').style.display = 'block'; }
         }
         async function processAdvancedWatermark() {
             const pdfFile = document.getElementById('wmPdfInput').files[0];
