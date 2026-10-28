@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDFTools - Premium Workspace</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
     <style>
@@ -22,6 +22,25 @@
 
         body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); overflow-x: hidden; transition: background-color 0.5s ease; }
         
+        /* ================== NEW: BACKGROUND LIVE CLOCK ================== */
+        .bg-clock {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14vw;
+            font-weight: 900;
+            z-index: -1; /* इसे सबसे पीछे रखने के लिए */
+            pointer-events: none; /* ताकि क्लिक में दिक्कत न हो */
+            background: linear-gradient(135deg, var(--primary) 0%, #f43f5e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.08; /* हल्का और पारदर्शी (Watermark effect) */
+            white-space: nowrap;
+            user-select: none;
+            transition: opacity 0.5s ease;
+        }
+
         /* Header & Theme Switcher */
         header { 
             background: var(--header-bg); backdrop-filter: blur(12px);
@@ -38,23 +57,6 @@
         .nav-links a:hover { color: var(--primary); }
         .login-btn { background: var(--text-main); color: var(--card-bg) !important; padding: 10px 24px; border-radius: 8px; transition: 0.3s; cursor: pointer; }
         .login-btn:hover { opacity: 0.8; }
-
-        /* ================== NEW: LIVE CLOCK ================== */
-        .live-clock {
-            background: var(--primary);
-            color: #ffffff;
-            padding: 6px 16px;
-            border-radius: 30px;
-            font-size: 13px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-            margin-right: 10px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: 0.3s;
-        }
 
         /* Theme Selector Buttons */
         .theme-selector { display: flex; gap: 8px; margin-right: 15px; border-right: 2px solid var(--border-color); padding-right: 15px; }
@@ -151,6 +153,9 @@
 <body>
 
     <div id="loader"><div class="spinner"></div><h2 id="loader-text" style="color: #0f172a;">Processing...</h2></div>
+
+    <!-- BACKGROUND LIVE CLOCK WATERMARK -->
+    <div id="bgClock" class="bg-clock">00:00:00</div>
 
     <!-- Modals -->
     <div class="modal-overlay" id="loginModal">
@@ -251,9 +256,6 @@
         <div class="logo" onclick="switchPage('home')">PDF<span>Tools.</span></div>
         
         <div class="nav-links">
-            <!-- NEW: LIVE CLOCK BADGE -->
-            <div id="liveClock" class="live-clock">⏱️ 00:00:00</div>
-
             <!-- Theme Changer Dots -->
             <div class="theme-selector">
                 <div class="theme-dot active" style="background: #f8fafc;" onclick="changeTheme('light')" title="Light Theme"></div>
@@ -378,9 +380,9 @@
     <script>
         const { PDFDocument, rgb, degrees } = PDFLib;
 
-        // ==================== NEW: LIVE CLOCK LOGIC ====================
-        function startLiveClock() {
-            const clockElement = document.getElementById('liveClock');
+        // ==================== BACKGROUND LIVE CLOCK LOGIC ====================
+        function startBackgroundClock() {
+            const clockElement = document.getElementById('bgClock');
             setInterval(() => {
                 const now = new Date();
                 const timeString = now.toLocaleTimeString('en-US', { 
@@ -389,10 +391,10 @@
                     second: '2-digit',
                     hour12: true 
                 });
-                clockElement.innerHTML = '⏱️ ' + timeString;
+                clockElement.innerHTML = timeString;
             }, 1000);
         }
-        startLiveClock(); // Start the clock immediately
+        startBackgroundClock(); 
 
         // ==================== THEME CHANGER ====================
         const themes = {
