@@ -21,7 +21,50 @@
 
         body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); overflow-x: hidden; transition: background-color 0.5s ease; }
         
-        /* ================== NEW: HEADER WITH LEFT DATE & RIGHT TIME ================== */
+        /* ================== UPDATED: BACKGROUND LIVE CLOCK (SIDE-BY-SIDE) ================== */
+        /* बाईं तरफ की बैकग्राउंड घड़ी (Left Side) */
+        .bg-clock-left {
+            position: fixed;
+            top: 50%;
+            left: -5%; /* थोड़ा बाहर की तरफ ताकि अच्छा लगे */
+            transform: translateY(-50%);
+            font-size: 10vw; /* साइज़ थोड़ा छोटा किया ताकि बीच में जगह रहे */
+            font-weight: 900;
+            z-index: -1; 
+            pointer-events: none; 
+            background: linear-gradient(135deg, var(--primary) 0%, #f43f5e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.08; 
+            white-space: nowrap;
+            user-select: none;
+            transition: opacity 0.5s ease;
+            writing-mode: vertical-rl; /* टेक्स्ट को खड़ा (Vertical) करने के लिए */
+            text-orientation: mixed;
+        }
+
+        /* दाईं तरफ की बैकग्राउंड तारीख (Right Side) */
+        .bg-clock-right {
+            position: fixed;
+            top: 50%;
+            right: -5%;
+            transform: translateY(-50%) rotate(180deg); /* इसे सीधा दिखाने के लिए घुमाया */
+            font-size: 8vw;
+            font-weight: 900;
+            z-index: -1; 
+            pointer-events: none; 
+            background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.08; 
+            white-space: nowrap;
+            user-select: none;
+            transition: opacity 0.5s ease;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        /* Header & Theme Switcher */
         header { 
             background: var(--header-bg); backdrop-filter: blur(12px);
             padding: 15px 5%; box-shadow: 0 1px 10px rgba(0,0,0,0.05); 
@@ -35,7 +78,7 @@
         .logo span { color: #f43f5e; }
         
         .live-date { background: #f1f5f9; color: #475569; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; border: 1px solid var(--border-color); }
-        .live-time { background: var(--primary); color: #ffffff; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); margin-left: 15px; }
+        .live-time { background: var(--primary); color: #ffffff; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); margin-left: 15px; transition: background-color 0.5s ease; }
 
         .nav-links { display: flex; gap: 20px; align-items: center; }
         .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 15px; transition: color 0.3s; }
@@ -136,6 +179,10 @@
 <body>
 
     <div id="loader"><div class="spinner"></div><h2 id="loader-text" style="color: #0f172a;">Processing...</h2></div>
+
+    <!-- BACKGROUND LIVE CLOCK (LEFT AND RIGHT) -->
+    <div id="bgClockLeft" class="bg-clock-left">00:00:00</div>
+    <div id="bgDateRight" class="bg-clock-right">--/--/----</div>
 
     <!-- Modals -->
     <div class="modal-overlay" id="loginModal">
@@ -369,20 +416,42 @@
     <script>
         const { PDFDocument, rgb, degrees } = PDFLib;
 
-        // ==================== DATE & TIME LOGIC ====================
+        // ==================== DATE & TIME LOGIC (HEADER + BACKGROUND) ====================
+        const colors = [
+            'linear-gradient(135deg, #4f46e5 0%, #f43f5e 100%)',
+            'linear-gradient(135deg, #10b981 0%, #3b82f6 100%)',
+            'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)',
+            'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
+            'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)'
+        ];
+        let currentHour = new Date().getHours();
+
         function updateDateTime() {
             const now = new Date();
             
-            // Format Date (e.g., Oct 24, 2026)
+            // Header Top Bar
             const dateOptions = { month: 'short', day: 'numeric', year: 'numeric' };
             document.getElementById('liveDate').innerText = '📅 ' + now.toLocaleDateString('en-US', dateOptions);
-            
-            // Format Time (e.g., 04:30:15 PM)
             const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-            document.getElementById('liveTime').innerText = '⏱️ ' + now.toLocaleTimeString('en-US', timeOptions);
+            const timeString = now.toLocaleTimeString('en-US', timeOptions);
+            document.getElementById('liveTime').innerText = '⏱️ ' + timeString;
+
+            // Background Clock (Left = Time, Right = Date)
+            document.getElementById('bgClockLeft').innerText = timeString;
+            document.getElementById('bgDateRight').innerText = now.toLocaleDateString('en-US', dateOptions);
+
+            // Change background clock color every hour
+            if (now.getHours() !== currentHour) {
+                currentHour = now.getHours();
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                document.getElementById('bgClockLeft').style.background = randomColor;
+                document.getElementById('bgClockLeft').style.webkitBackgroundClip = 'text';
+                document.getElementById('bgDateRight').style.background = randomColor;
+                document.getElementById('bgDateRight').style.webkitBackgroundClip = 'text';
+            }
         }
         setInterval(updateDateTime, 1000);
-        updateDateTime(); // Call immediately
+        updateDateTime(); 
 
         // ==================== THEME CHANGER (WITH LOCAL STORAGE) ====================
         const themes = {
@@ -407,11 +476,9 @@
             document.querySelectorAll('.theme-dot').forEach(dot => dot.classList.remove('active'));
             document.querySelector(`.theme-dot[onclick*="${themeName}"]`).classList.add('active');
 
-            // Save theme preference so it doesn't reset on refresh
             localStorage.setItem('selectedTheme', themeName);
         }
 
-        // Load saved theme on startup
         const savedTheme = localStorage.getItem('selectedTheme') || 'light';
         changeTheme(savedTheme);
 
