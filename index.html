@@ -26,16 +26,16 @@
         .bg-clock-left {
             position: fixed;
             top: 50%;
-            left: -5%; /* थोड़ा बाहर की तरफ ताकि अच्छा लगे */
+            left: -5%; /* थोड़ा बाहर की तरफ ताकि बीच में जगह रहे */
             transform: translateY(-50%);
-            font-size: 10vw; /* साइज़ थोड़ा छोटा किया ताकि बीच में जगह रहे */
+            font-size: 10vw; /* साइज़ छोटा किया */
             font-weight: 900;
             z-index: -1; 
             pointer-events: none; 
             background: linear-gradient(135deg, var(--primary) 0%, #f43f5e 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            opacity: 0.08; 
+            opacity: 0.08; /* हल्का (Visual Watermark) */
             white-space: nowrap;
             user-select: none;
             transition: opacity 0.5s ease;
